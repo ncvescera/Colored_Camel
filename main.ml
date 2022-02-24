@@ -26,23 +26,27 @@ let x = function
 let grafo1 = Grafo x;;
 
 
+let reverse lista = List.rev lista;; (*potrebbe essere tolta dato che utilizzata sono in bf*)
+let rec print_list =
+        function
+            [] -> print_string "\n"
+            | x::rest -> print_int x; print_list rest
 
 
+(* ritorna una lista con tutti i nodi esplorati*)
 let bf (Grafo succ) start =
     let rec search visited = function
         [] -> visited
-        | a::rest ->    if List.mem a visited then search visited rest
-                        else search (a::visited) (rest@(succ a))
-    in search [] [start];; (*non ho idea di come funzioni sta cosa*)
+        | node::tail ->    if List.mem node visited then search visited tail
+                        else search (node::visited) (tail@(succ node))
+    in reverse (search [] [start]);; (*la lista viene data al contrario quindi la inverto*)
 
 
-let rec print_list = function
-    [] -> print_string "\n"
-    | a::rest -> print_int a; print_list rest;;
 
 
-let reverse lista = List.rev lista;;
 
+let main =
+    let result = bf grafo1 0 in 
+    print_list result;;
 
-let result = bf grafo1 0;;
-print_list (reverse result);;
+main ;;
