@@ -60,9 +60,14 @@ let max_node_adj_color (Grafo g) node colored =
 (* controlla i vicini e ritorna il max color + 1 *)
 let choose_color (Grafo g) node colored maxColor = (*((max_node_adj_color (Grafo g) node colored) + 1);;*)
   (*((max_node_adj_color (Grafo g) node colored) + 1) mod maxColor;;*)
-  let result = ((max_node_adj_color (Grafo g) node colored) + 1) in 
+  (*let result = ((max_node_adj_color (Grafo g) node colored) + 1) in 
     if result > maxColor then raise InsufficentColorNumber
-    else result mod maxColor;;
+    else result mod maxColor;;*)
+    let result = ((max_node_adj_color (Grafo g) node colored) + 1) in 
+      let adj_colors = all_ajc_colors (g node) colored in
+        let result_mod = result mod maxColor in
+          if List.mem result_mod adj_colors then raise InsufficentColorNumber
+          else result_mod;;
 
 
 let colora (Grafo g) start maxcolor =

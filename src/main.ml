@@ -17,7 +17,7 @@ let maxColors = 3;;
 let grafo1 = Grafo x;;  (* Grafo effettivo *)
 
 (* Grafo 2 *)
-
+(*
 let x = function        (* Successori *)
       0 -> [1; 2; 3; 4; 5]
     | 1 -> [0; 3]
@@ -32,7 +32,7 @@ let x = function        (* Successori *)
     let maxColors = 3;;
     let grafo1 = Grafo x;;  (* Grafo effettivo *)
 
-
+*)
 
 
 let n_nodi = conta_nodi grafo1 start;;  (* Numero di nodi raggiungibili dallo start *)
