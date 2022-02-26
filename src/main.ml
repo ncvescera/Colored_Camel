@@ -7,9 +7,9 @@ open Data;;
 stampa_logo ();;
 
 (* Funzione principale *)
-let main (g, start, maxColors)=
-    let colorati = colora g start maxColors in
+let main (g, partenza, maxColori)=
+    let colorati = colora g partenza maxColori in
     stampa_nodi_colorati colorati
 ;;
 
-main (get_data 1);;
+main (scegli_grafo 1);;

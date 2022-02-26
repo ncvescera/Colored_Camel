@@ -1,1 +1,1 @@
-val get_data : int -> GraphUtils.grafo * int * int
+val scegli_grafo : int -> GraphUtils.grafo * int * int

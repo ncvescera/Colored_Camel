@@ -3,7 +3,7 @@ exception BadChoice of string;;
 
 let exception_choise = BadChoice "L'id selezionato è inesistente !!";;
 
-(* Grafo 1 *)
+(*Grafo 1 *)
 let grafo_1 =
   let x = function        (* Successori *)
         0 -> [1; 2]
@@ -15,7 +15,7 @@ let grafo_1 =
       | _ -> [] in
   let start = 3 in         (* Partenza *)
   let maxColors = 3 in     (* Massimo numero di colori*)
-  let g = Grafo x in  (* Grafo effettivo *)
+  let g = Grafo x in       (* Grafo effettivo *)
 
   (g, start, maxColors)
 ;;
@@ -23,7 +23,7 @@ let grafo_1 =
 
 
 
-(* Grafo 2 *)
+(*Grafo 2 *)
 (* con numero di Colori insufficienti *)
 let grafo_2_err = 
   let x = function        (* Successori *)
@@ -36,13 +36,13 @@ let grafo_2_err =
       | _ -> [] in
 
     let start = 0 in         (* Partenza *)
-    let maxColors = 3 in
-    let g = Grafo x in  (* Grafo effettivo *)
+    let maxColors = 3 in     (* Massimo numero di colori*)
+    let g = Grafo x in       (* Grafo effettivo *)
     
     (g, start, maxColors)
 ;;
 
-(* Grafo 2 *)
+(*Grafo 2 *)
 (* con numero di Colori giusti *)
 let grafo_2 = 
   let x = function        (* Successori *)
@@ -55,17 +55,29 @@ let grafo_2 =
       | _ -> [] in
 
     let start = 0 in         (* Partenza *)
-    let maxColors = 4 in
-    let g = Grafo x in  (* Grafo effettivo *)
+    let maxColors = 4 in     (* Massimo numero di colori*)
+    let g = Grafo x in       (* Grafo effettivo *)
     
     (g, start, maxColors)
 ;;
 
 
-let get_data data_id =
-  let aux = function (*data id*)
+(*Permette di scegliere un grafo tra quelli di default*)
+(* Ogni grafo ha un id. Dato questo id ritorna il grafo:
+    
+    Grafo g, partenza, maxColori dove
+
+    Grafo g:    Grafo (funzione successori)
+    partenza:   nodo da cui partire
+    maxColori:  numero massimo di colori da utilizzare per la colorazione
+
+  input:
+    id_grafo: Id del grafo che si vuole scegliere
+*)
+let scegli_grafo id_grafo =
+  let aux = function (*grafo id*)
      1 -> grafo_1 
     |2 -> grafo_2
     |3 -> grafo_2_err
     |_ -> raise exception_choise
-  in aux data_id;; 
+  in aux id_grafo;; 
