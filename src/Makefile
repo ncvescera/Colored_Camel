@@ -1,20 +1,23 @@
+fname = exe
+cc = ocamlc
+cflags = -c
+
 exe: graphs printer main
-	ocamlc graphUtils.cmo printer.cmo main.cmo -o exe
-	./exe
+	$(cc) graphUtils.cmo printer.cmo main.cmo -o $(fname)
+
 
 graphs: graphUtils.ml graphUtils.mli
-	ocamlc -c graphUtils.mli
-	ocamlc -c graphUtils.ml
-
+	$(cc) $(cflags) graphUtils.mli graphUtils.ml
+	
 printer: printer.ml printer.mli
-	ocamlc -c printer.mli
-	ocamlc -c printer.ml
+	$(cc) $(cflags) printer.mli printer.ml
 
 main: main.ml main.mli
-	ocamlc -c main.mli
-	ocamlc -c main.ml
+	$(cc) $(cflags) main.mli main.ml
+
 
 clear:
 	rm -f *.cmi *.cmx *.o *.cmo *.out *.cm*
+
 
 .PHONY: clear
