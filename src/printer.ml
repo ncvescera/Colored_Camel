@@ -40,9 +40,17 @@ let stampa_logo () =
      ██████  ██   ██ ██   ██ ██      ██   ██      ██████  ██████  ███████  ██████  ██   ██ ██ ██   ████  ██████  
                                                                                                                   
 
-     
+Un programma scritto in OCaml in grado di risolvere il problema della colorazione di un grafo.
+
+
 " in aux ()
 ;;
+
+
+
+
+
+
 
 
 
@@ -63,6 +71,23 @@ let print_colore (Colore colore) testo =
   in aux (Colore colore) testo reset
 ;;
 
+
+
+
+
+
+let menu () = 
+  print_colore bianco_b "HELLO Utente 🦧 !\n";
+  print_string "Coloriamo un po' di grafi 🖌️\n";
+  print_string "Di seguito trovi un elenco dei grafi di default tra cui puoi scegliere.\n";
+  print_string "Ricorda che se ne hai aggiunti altri non verrano mostrai, ma potrai comunque selezionarli !\n\n";
+
+  print_string
+  "
+  1) Grafo 1 funzionante
+  2) Grafo 2 con numero sufficiente di colori
+  3) Grafo 2 con un numero di colori insufficiente per essere colorato\n\n"
+;;
 
 
 

@@ -1,1 +1,1 @@
-val main : GraphUtils.grafo * int * int -> unit
+val main : unit -> unit
