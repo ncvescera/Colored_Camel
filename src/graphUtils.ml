@@ -15,7 +15,7 @@ exception InsufficentColorNumber;;
 (* Va a cercare il nodo tra la lista dei nodi colorati, se esiste ritorna il suo colore
     altrimenti -1
     
-    e.g.: node=1 colored=[(0,10), (5,1), (7,9)]
+    e.g.: nodo=1 colorati=[(0,10), (5,1), (7,9)]
 
       (0, 10) -> 0 = 1 ? NO
       (5, 1)  -> 5 = 1 ? NO
@@ -23,24 +23,24 @@ exception InsufficentColorNumber;;
       
       lista finita -> -1 (il nodo non è stato colorato)
 
-    e.g.: node=1 colored=[(1,10), (5,1), (7,9)]
+    e.g.: nodo=1 colorati=[(1,10), (5,1), (7,9)]
 
       (1, 10) -> 1 = 1 ? SI -> 10
 
   input:
-    node:    Nodo di cui si vuole ottenere il colore
-    colored: Lista di nodi colorati
+    nodo:    Nodo di cui si vuole ottenere il colore
+    colorati: Lista di nodi colorati
 *)
-let get_node_color node colored = 
-  let rec aux node = function (*lista di nodi colorati*)
-      (x,y)::tail ->  (*caso ricorsivo, prende il primo elemento della forma (x,y)*)
-        if x = node     (*se l'elemento in questione è il nodo che cerco*)
+let get_colore nodo colorati = 
+  let rec aux nodo = function (*lista di nodi colorati*)
+      (x,y)::coda ->  (*caso ricorsivo, prende il primo elemento della forma (x,y)*)
+        if x = nodo     (*se l'elemento in questione è il nodo che cerco*)
           then y        (* ritorna il colore del nodo*)
         else 
-          aux node tail (*continua con la ricorsione*)
+          aux nodo coda (*continua con la ricorsione*)
       | _ -> (-1)       (*se la lista finisce vuol dire che il nodo non è colorato.*)
 
-  in aux node colored   (*avvia la ricorsione cone node=node lista_di_nodi_colorati=colored*)
+  in aux nodo colorati   (*avvia la ricorsione cone nodo=nodo lista_di_nodi_colorati=colorati*)
 ;;
 
 
@@ -60,11 +60,11 @@ let get_node_color node colored =
       9
 
   input:
-      list: Lista su cui trovare il massimo
+      lista: Lista su cui trovare il massimo
 *)
-let rec list_max = function   (* lista su cui trovare il massimo *)
+let rec max_lista = function   (* lista su cui trovare il massimo *)
     [x]       -> x                      (*caso base, la lista ha un solo elemento. Ritrona lui come massimo*)
-    | x::tail -> max x (list_max tail)  (*caso ricorsivo, prende il primo elemento e trova il massimo tra lui e gli altri.*)
+    | x::coda -> max x (max_lista coda) (*caso ricorsivo, prende il primo elemento e trova il massimo tra lui e gli altri.*)
     | _       -> 0                      (*in tutti gli altri casi [per essere sicuro]*)
 ;;
 
@@ -77,40 +77,39 @@ let rec list_max = function   (* lista su cui trovare il massimo *)
 (*Trova tutti i colori vicini di un nodo*)
 (* Per ogni nodo ne perende il colore e lo aggiunge al risultato
 
-    e.g.: nodo=4, adj=[1,3,5] colored=[(1,0),(3,-1),(5,4), (20, 0),(11,-1)]
+    e.g.: nodo=4, vicini=[1,3,5] colorati=[(1,0),(3,-1),(5,4), (20, 0),(11,-1)]
       
-      result = [0, -1, 4]
+      risultato = [0, -1, 4]
 
   input:
-      lista:  Lista di nodi adiacenti al nodo in questione
-      colored: Lista di nodi colorati
+      vicini:   Lista di nodi adiacenti al nodo in questione
+      colorati: Lista di nodi colorati
 *)
-let rec all_adj_colors lista colored=
-  let rec aux result = function (*lista di nodi*)
-    []        -> result   (*caso base, non ci sono più nodi di cui prendere il colore. Ritorna tutti i colori trovati*)
-    | x::tail ->          (*caso ricorsivo, esamina il primo nodo*)
+let rec tutti_colori_vicini vicini colorati =
+  let rec aux risultato = function (*lista di nodi*)
+      []        -> risultato   (*caso base, non ci sono più nodi di cui prendere il colore. Ritorna tutti i colori trovati*)
+    | x::coda   ->             (*caso ricorsivo, esamina il primo nodo*)
       aux 
-          (result@[get_node_color x colored]) (*aggiunge al risultato il colore del nodo analizzato*)
-          tail                                (*toglie il nodo analizzato dalla lista e continua*)
+          (risultato@[get_colore x colorati]) (*aggiunge al risultato il colore del nodo analizzato*)
+          coda                                    (*toglie il nodo analizzato dalla lista e continua*)
   
-  in aux [] lista   (*avvia la ricorsione con result=[] e lista_di_nodi=lista*)
+  in aux [] vicini   (*avvia la ricorsione con risultato=[] e lista_di_nodi=vicini*)
 ;;
 
 
-(*Trova il massimo tra i colori vicini di un nodo*)
-(* Prende i colori vicini del nodo [all_adj_colors()] e 
-   trova il massimo di questa lista [list_max()]
+(*Trova il colore massimo (il colore con valore più alto) tra i colori vicini di un nodo*)
+(* Prende i colori vicini del nodo [tutti_colori_vicini()] e 
+   trova il massimo di questa lista [max_lista()]
    
   input:
-      g:      Grafo
-      node:   Nodo da analizzare
-      colore: Lista di nodi colorati
-
+      g:        Grafo
+      nodo:     Nodo da analizzare
+      colorati: Lista di nodi colorati
 *)
-let max_node_adj_color (Grafo g) node colored =
-  let adj = (g node) in                         (*prende i vicini del nodo*)            
-    let colori = all_adj_colors adj colored     (*prende tutti i colori dei vicini*)
-  in list_max colori                            (*calcola il massimo tra tutti i colori presi*)
+let max_colore_vicini (Grafo g) nodo colorati =
+  let vicini = (g nodo) in                          (*prende i vicini del nodo*)            
+    let colori_vicini = tutti_colori_vicini vicini colorati     (*prende tutti i colori dei vicini*)
+  in max_lista colori_vicini                            (*calcola il massimo tra tutti i colori presi*)
 ;;
 
 
@@ -118,7 +117,7 @@ let max_node_adj_color (Grafo g) node colored =
 
 
 
-(*valore di rifermineto per trovare il nodo mancante*)
+(*Valore di rifermineto per trovare il nodo mancante*)
 (* il valore qui è solo un placeholder, viene cambianto appena avviata la funzione colora!!*)
 let refValue = ref 10;; 
 
@@ -130,30 +129,33 @@ let refValue = ref 10;;
 
 (*Trova il colore mancate tra i colori vicini al nodo [se esiste]*)
 (* Per trovare il colore mancate, 
-   somma tutti i colori dei vicini [adj_colors] e sottrae questo numero al valore di riferimento
+   somma tutti i colori dei vicini [colori_vicini] e sottrae questo numero al valore di riferimento
    
    e.g.: 
-    maxColor=4 --> ref_value = 3+2+1+0 = 6 (calcolato all'inizio) adj_colors=[0,2,3]
+    maxColori=4 --> ref_value = 3+2+1+0 = 6 (calcolato all'inizio) colori_vicini=[0,2,3]
       somma = 0 + 2 + 3 = 5
-      risultato = ref_value - somma = 1
+      risultato = ref_value - somma = 6 - 5 = 1
 
   input: 
-    adj_colors: Lista dei colori adiacenti al nodo
-    maxColor:   Numero massimo di colori da utilizzare
+    colori_vicini: Lista dei colori adiacenti al nodo
+    maxColori:     Numero massimo di colori da utilizzare
 *)
-let find_missing adj_colors maxColor = 
-  let rec sum result = function (*lista di elementi da sommare*)
-    []        -> result   (*caso base, non ci sono più elementi da sommare. Ritorna il risultato [la somma]*)
-    | x::tail ->          (*caso ricorsivo, prende il primo elemento nella lista*)
-      if x = (-1)                   (*se è -1: nod non colorato*)
-        then sum (result + 0) tail  (* somma 0 (lo ignora) e va avanti*)
-      else sum (result + x) tail    (*altrimenti somma il colore e va avanti*)
-  in let somma = sum 0 adj_colors in  (*trova la somma di tutti i colori adiacenti al nodo*)
-    if somma > !refValue                      (*somma superiore al valore di rifierimento, c'è un problema [controllo per sicurezza]*)
+let trova_mancante colori_vicini maxColori = 
+  let rec sum risultato = function (*lista di elementi da sommare*)
+      []        -> risultato          (*caso base, non ci sono più elementi da sommare. Ritorna il risultato [la somma]*)
+    | x::coda   ->                    (*caso ricorsivo, prende il primo elemento nella lista*)
+        if x = (-1)                         (*se è -1: nodo non colorato*)
+          then sum (risultato + 0) coda     (* somma 0 (lo ignora) e va avanti*)
+        else sum (risultato + x) coda       (*altrimenti somma il colore e va avanti*)
+  
+  in let somma = sum 0 colori_vicini in  (*trova la somma di tutti i colori adiacenti al nodo*)
+    if somma > !refValue                       (*somma superiore al valore di rifierimento, c'è un problema [controllo per sicurezza]*)
       then raise InsufficentColorNumber
-    else if somma < (maxColor -1)             (*somma eccessivamente bassa, mancano più elementi. Tenta di trovarne uno [controllo per sicurezza]*)
+
+    else if somma < (maxColori -1)             (*somma eccessivamente bassa, mancano più elementi. Tenta di trovarne uno [controllo per sicurezza]*)
       then (!refValue - somma) mod !refValue
-    else (!refValue - somma)                  (*ritorna il colore mancante*)
+
+    else (!refValue - somma)                   (*ritorna il colore mancante*)
 ;;
 
 
@@ -164,18 +166,18 @@ let find_missing adj_colors maxColor =
 
 (*Trova il valore di riferimento*)
 (* Serve per calcolare il colore mancate: è la somma di tutti i valori dei colori.
-    e.g.: se maxColor = 4 allora ref_value = 0 + 1 + 2 + 3 = 6
+    e.g.: se maxColori = 4 allora ref_value = 0 + 1 + 2 + 3 = 6
 
       3 + (3-1) + (3-1-1) + ... + 0
 
   input:
-    maxColor: Massimo numero di colori
+    maxColori: Massimo numero di colori
 *)
-let find_refValue maxColor = 
-  let rec aux result = function (* colore *)
-    0 -> result                     (*caso base, è alla fine perchè l'ultimo colore che analizza è 0. Ritorna il risultato*)
-    | x -> aux (result+(x-1)) (x-1) (*caso ricorsivo, somma al risultato il colore precedente all'attuale*)
-  in aux 0 maxColor                 (*avvia la ricorsione con result=0 e colore=maxColor*)
+let calcola_refValue maxColori = 
+  let rec aux risultato = function (* colore *)
+      0 -> risultato                     (*caso base, è alla fine perchè l'ultimo colore che analizza è 0. Ritorna il risultato*)
+    | x -> aux (risultato+(x-1)) (x-1)   (*caso ricorsivo, somma al risultato il colore precedente all'attuale*)
+  in aux 0 maxColori                   (*avvia la ricorsione con risultato=0 e colore=maxColori*)
 ;;               
 
 
@@ -185,29 +187,31 @@ let find_refValue maxColor =
 
 
 (*Sceglie il colore per il nodo dato*)
-(* Il colore per il nodo è: (massimo dei colori vicini + 1) mod maxColor
+(* Il colore per il nodo è: (massimo dei colori vicini + 1) mod maxColori
    Se il colore scelto è uguale ad un colore dei vicini del nodo, 
     prova a capire se può sceglierne un altro (cerca quello che manca). Se è impossibile lancia un'eccezione, altrimenti ritorna il mancante.
    Altrimenti ritorna il colore scelto.
 
   input:
-    g:        Grafo (per trovare i vicini del nodo)
-    node:     Nodo in questione
-    colored:  Lista di nodi colorati
-    maxColor: Massimo numero di colori
+    g:         Grafo (per trovare i vicini del nodo)
+    nodo:      Nodo in questione
+    colorati:  Lista di nodi colorati
+    maxColori: Massimo numero di colori
 *)
-let choose_color (Grafo g) node colored maxColor = 
-  let result = ((max_node_adj_color (Grafo g) node colored) + 1) in (*trova il massimo tra i colori dei vicini del nodo*)
-    let adj_colors = all_adj_colors (g node) colored in             (*tutti i colri vicini*)
-      let result_mod = result mod maxColor in                       (*calcola il modulo così da avere il risultato pronto*)
-        if List.mem result_mod adj_colors                           (*il colore scelto è lo stesso di un colore vicino*)
-          then let missing = find_missing adj_colors maxColor in    (* prova a capire se può scegliere un altro colore [trova il mancante tra i vicini]*)
-            if List.mem missing adj_colors 
-              then raise InsufficentColorNumber                     (*  è impossibile, numero di colori insufficiente !!*)
-            else missing                                            (*  è possibile, ritorna il colore mancante*)
+let scegli_colore (Grafo g) nodo colorati maxColori = 
+  let risultato = ((max_colore_vicini (Grafo g) nodo colorati) + 1) in (*trova il massimo tra i colori dei vicini del nodo*)
+    let colori_vicini = tutti_colori_vicini (g nodo) colorati in            (*trova tutti i colri vicini*)
+      let risultato_mod = risultato mod maxColori in                        (*calcola il modulo così da avere il risultato pronto*)
+        if List.mem risultato_mod colori_vicini                             (*il colore scelto è lo stesso di un colore vicino*)
+          then let mancante = trova_mancante colori_vicini maxColori in     (* prova a capire se può scegliere un altro colore [trova il mancante tra i vicini]*)
+            if List.mem mancante colori_vicini 
+              then raise InsufficentColorNumber                             (*  è impossibile, numero di colori insufficiente !!*)
+            
+            else mancante                                                   (*  è possibile, ritorna il colore mancante*)
         
-        else result_mod                                            (*trovato un colore valido, lo ritorna*)
+        else risultato_mod                                          (*trovato un colore valido, lo ritorna*)
 ;;
+
 
 
 
@@ -216,24 +220,25 @@ let choose_color (Grafo g) node colored maxColor =
 
 (* Colora in grafo in modo da non avere nodi adiacenti con lo stesso colore*)
 (* input:
-    g:        Grafo
-    start:    Nodo di partenza
-    maxcolor: Massimo numero di colori da utilizzare
+    g:         Grafo
+    partenza:  Nodo di partenza
+    maxColori: Massimo numero di colori da utilizzare
 *)
-let colora (Grafo g) start maxcolor =
-  refValue := find_refValue maxcolor;       (*valore per trovare il colore mancante*)
-  let rec search visited colored = 
+let colora (Grafo g) partenza maxColori =
+  refValue := calcola_refValue maxColori;       (*valore per trovare il colore mancante*)
+  let rec esplora visitati colorati = 
     function (*frontiera*)
-      []            -> colored  (*fine delle ricorsione, se la frontiera è vuota colorazione finita*)
-      | node::tail  ->          (*caso ricorsivo, continua a colorare*)
-        if List.mem node visited 
-          then search visited colored tail  (*ignora il nodo ed estrae il successivo dalla frontiera*)
+        []            -> colorati  (*fine delle ricorsione, se la frontiera è vuota la colorazione è finita*)
+      | nodo::coda    ->           (*caso ricorsivo, continua a colorare*)
+        if List.mem nodo visitati              (*se il nodo è già stato visitato*)
+          then esplora visitati colorati coda  (* ignora il nodo ed estrae il successivo dalla frontiera*)
+        
         else 
           (*continua con la ricorsione espandendo i nodi vicini al nodo*)
-          search 
-                (visited@[node])  (*aggiunge il nodo attuale ai visitati*)
-                (colored@[(node, (choose_color (Grafo g) node colored maxcolor))])  (*colora il nodo [aggiunge la coppia (nodo,colore) a colored]*)
-                (tail@(g node))   (*espande i vicini del nodo attuale e li aggiunge alla frontiera*)
+          esplora 
+                (visitati@[nodo])                                                      (*aggiunge il nodo attuale ai visitati*)
+                (colorati@[(nodo, (scegli_colore (Grafo g) nodo colorati maxColori))]) (*colora il nodo [aggiunge la coppia (nodo,colore) a colorati]*)
+                (coda@(g nodo))                                                        (*espande i vicini del nodo attuale e li aggiunge alla frontiera*)
       
-  in search [] [] [start]   (*avvia la ricerca e la colorazione, visited=[], colored=[], frontiera=[start]*)
+  in esplora [] [] [partenza]   (*avvia la ricerca e la colorazione, visitati=[], colorati=[], frontiera=[partenza]*)
 ;;
