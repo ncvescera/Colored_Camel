@@ -1,8 +1,10 @@
-open Printer
-open GraphUtils
-open Data
+open Printer;;
+open GraphUtils;;
+open Data;;
 
 
+
+print_logo ();;
 
 (* Funzione principale *)
 let main (g, start, maxColors)=
