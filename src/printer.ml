@@ -25,9 +25,9 @@ let stampa_logo () =
 
     e.g.: colorati=[(0,1), (2,2), (1,0)]
 
-      Node: 0 - Color: 1
-      Node: 2 - Color: 2
-      Node: 1 - Color: 0
+      Nodo: 0 - Colore: 1
+      Nodo: 2 - Colore: 2
+      Nodo: 1 - Colore: 0
 
   input:
     colorati: Lista di nodi colorati
@@ -42,3 +42,51 @@ let stampa_nodi_colorati colorati =
       aux rest;
   in aux colorati  (*avvia la ricorsione con lista_di_nodi_colorati=colorati*)
 ;;
+
+
+
+
+
+
+
+(*Stampa una data lista*)
+(* Stampa ogni lemento della lista separato da uno spazio. Alla fine un ritorno a capo
+
+    e.g.: lista=[0;2;3;4] --> 0 2 3 4
+
+  input:
+    lista: Lista da stampare
+*)
+let rec stampa_lista = function (* lista *)
+    []      -> print_string "\n"    (*caso base, la lista è finita. Stampa ritorno a capo*)
+  | x::coda ->                      (*caso ricorsivo, stampa l'elemento e continua*)
+      print_int x; 
+      print_string " ";
+      stampa_lista coda
+;;
+
+(*Stampa un grafo dato*)
+(* Dato un grafo e il nodo di partenza stampa il grafo
+    
+    e.g.: grafo 3
+      3 ➜ 0 1
+      0 ➜ 3 2
+      ...
+
+  input:
+    g:        Grafo da stampare
+    partenza: Nodo di partenza
+*)
+let stampa_grafo (GraphUtils.Grafo g) partenza =
+  let rec search visitati = function  (* frontiera *)
+      [] -> print_string "\n"         (*caso base, la lista è vuota. Stampa un ritorno a capo*)      
+      | nodo::coda ->                 (*caso ricorsivo, stampa il nodo ed i suoi vicini. Poi continua*)
+          if List.mem nodo visitati     (* il nodo è già stato visto, lo ignora*)
+            then search visitati coda
+          else                          (* stampa il nodo ed i suoi vicini. Poi continua*)
+            (
+              print_int nodo; print_string " ➜ "; stampa_lista (g nodo); 
+              search (visitati@[nodo]) (coda@(g nodo))
+            )
+
+  in search [] [partenza];; (*avvia la ricorsione con visitati=[] e frontiera=[partenza]*)
