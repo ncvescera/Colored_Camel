@@ -152,7 +152,10 @@ let rec stampa_lista = function (* lista *)
     g:        Grafo da stampare
     partenza: Nodo di partenza
 *)
-let stampa_grafo (GraphUtils.Grafo g) partenza =
+let stampa_grafo (GraphUtils.Grafo g) partenza maxColori =
+  print_colore rosso_b "Partenza: ";
+  print_int partenza; print_colore rosso_b " Max Colori: "; print_int maxColori;
+  print_string "\n\n";
   let rec search visitati = function  (* frontiera *)
       [] -> print_string "\n"         (*caso base, la lista è vuota. Stampa un ritorno a capo*)      
       | nodo::coda ->                 (*caso ricorsivo, stampa il nodo ed i suoi vicini. Poi continua*)

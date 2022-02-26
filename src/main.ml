@@ -31,7 +31,7 @@ let main () =
         in aux() 
             in let avvia_colorazione (g, partenza, maxColori) =                             (*fa partire la funzione che colora il grafo*)
                     print_string "\n";
-                    print_string "Il Grafo selezionato: \n\n"; stampa_grafo g partenza;
+                    print_string "Il Grafo selezionato: \n\n"; stampa_grafo g partenza maxColori;
                     print_string "Coloro ...\n\n";
 
                     let colorati = colora g partenza maxColori in stampa_nodi_colorati colorati
