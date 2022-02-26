@@ -10,6 +10,8 @@ stampa_logo ();;
 let main (g, partenza, maxColori)=
     print_string "Il Grafo selezionato: \n\n"; stampa_grafo g partenza;
     
+    print_string "Coloro ...\n\n";
+
     let colorati = colora g partenza maxColori in
     stampa_nodi_colorati colorati
 ;;

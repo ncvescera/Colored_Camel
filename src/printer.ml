@@ -1,20 +1,29 @@
+(*Definizione di tipo per i colori*)
 type colore = Colore of string;;
 
 
-(*colori*)
+(*Colori*)
+(* normali *)
 let rosso = Colore "\027[31m";;
 let verde = Colore "\027[32m";;
 let ciano =  Colore "\027[36m";;
 let bianco = Colore "\027[0m";;
+
+(* grassetto *)
 let rosso_b = Colore "\027[31;1m";;
 let verde_b = Colore "\027[32;1m";;
 let ciano_b = Colore "\027[36;1m";;
 let bianco_b = Colore "\027[0;1m";;
 
+(* valore di reset per stampare normalmente*)
 let reset = bianco;;
 
 
 
+
+
+(*Stampa il titolo del progetto*)
+(* Stampa un ASCII ART *)
 let stampa_logo () = 
   let aux () = print_string 
 "
@@ -36,6 +45,11 @@ let stampa_logo () =
 ;;
 
 
+
+
+
+
+
 (*Stampa il testo colorato*)
 (* Prende un colroe e del testo. Stampa il testo col determinato colore
 
@@ -46,7 +60,9 @@ let stampa_logo () =
 let print_colore (Colore colore) testo = 
   let aux (Colore colore) testo (Colore reset) = 
     print_string (colore ^ testo ^ reset)
-  in aux (Colore colore) testo reset;;
+  in aux (Colore colore) testo reset
+;;
+
 
 
 
@@ -94,7 +110,7 @@ let stampa_nodi_colorati colorati =
 let rec stampa_lista = function (* lista *)
     []      -> print_string "\n"    (*caso base, la lista è finita. Stampa ritorno a capo*)
   | x::coda ->                      (*caso ricorsivo, stampa l'elemento e continua*)
-      print_int x; 
+      print_colore ciano (string_of_int x); 
       print_string " ";
       stampa_lista coda
 ;;
@@ -119,7 +135,7 @@ let stampa_grafo (GraphUtils.Grafo g) partenza =
             then search visitati coda
           else                          (* stampa il nodo ed i suoi vicini. Poi continua*)
             (
-              print_int nodo; print_string " ➜ "; stampa_lista (g nodo); 
+              print_colore verde_b (string_of_int nodo); print_colore bianco_b " ➜ "; stampa_lista (g nodo); 
               search (visitati@[nodo]) (coda@(g nodo))
             )
 
