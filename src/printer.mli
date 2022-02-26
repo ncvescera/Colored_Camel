@@ -1,2 +1,2 @@
-val print_logo: unit -> unit
-val print_colori : (int * int) list -> unit
+val stampa_logo: unit -> unit
+val stampa_nodi_colorati : (int * int) list -> unit

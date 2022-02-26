@@ -4,12 +4,12 @@ open Data;;
 
 
 
-print_logo ();;
+stampa_logo ();;
 
 (* Funzione principale *)
 let main (g, start, maxColors)=
-    let res = colora g start maxColors in
-    print_colori res
+    let colorati = colora g start maxColors in
+    stampa_nodi_colorati colorati
 ;;
 
 main (get_data 1);;
