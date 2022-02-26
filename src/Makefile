@@ -3,8 +3,8 @@ cc = ocamlc
 cflags = -c
 cexename =-o $(fname)
 
-exe: graphs printer main
-	$(cc) $(cexename) graphUtils.cmo printer.cmo main.cmo
+exe: graphs printer data main
+	$(cc) $(cexename) graphUtils.cmo printer.cmo data.cmo main.cmo
 
 
 graphs: graphUtils.ml graphUtils.mli
@@ -12,6 +12,9 @@ graphs: graphUtils.ml graphUtils.mli
 	
 printer: printer.ml printer.mli
 	$(cc) $(cflags) printer.mli printer.ml
+
+data: data.ml data.mli
+	$(cc) $(cflags) data.mli data.ml
 
 main: main.ml main.mli
 	$(cc) $(cflags) main.mli main.ml
