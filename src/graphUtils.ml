@@ -56,21 +56,55 @@ let max_node_adj_color (Grafo g) node colored =
     let colori = all_ajc_colors adj colored     (* prende tutti i colori dei vicini *)
   in list_max colori;;                          (* calcola il massimo tra tutti i colori presi *)
 
+
+let refValue = ref 10;;
+
+(* trova il colore mancate tra i colori vicini al nodo se esiste*)
+let find_missing adj_colors maxColor = 
+  let rec sum result = function (*lista di elementi da sommare*)
+    [] -> result
+    | x::tail -> if x = (-1) then sum (result + 0) tail
+    else sum (result + x) tail
+  in let somma = sum 0 adj_colors in 
+    print_string "in find_missing "; print_int somma; print_string "\n";
+    if somma > !refValue then raise InsufficentColorNumber
+    else if somma < (maxColor -1) then (!refValue - somma) mod !refValue
+    else (!refValue - somma);;
+
+
+let find_refValue maxColor = 
+let rec aux result = function (* colore *)
+  0 -> result
+  | x -> aux (result+(x-1)) (x-1)
+in aux 0 maxColor;;
+
 (* dal grafo e dalla lista dei nodi colorati, ritorna il colore per il nuovo nodo*)
 (* controlla i vicini e ritorna il max color + 1 *)
-let choose_color (Grafo g) node colored maxColor = (*((max_node_adj_color (Grafo g) node colored) + 1);;*)
-  (*((max_node_adj_color (Grafo g) node colored) + 1) mod maxColor;;*)
-  (*let result = ((max_node_adj_color (Grafo g) node colored) + 1) in 
-    if result > maxColor then raise InsufficentColorNumber
-    else result mod maxColor;;*)
+let choose_color (Grafo g) node colored maxColor = 
+  (*
+  let colori_vicini = all_ajc_colors (g node) colored in
+  let colore_mancante = find_missing colori_vicini maxColor in
+  colore_mancante;;*)
+  
     let result = ((max_node_adj_color (Grafo g) node colored) + 1) in 
       let adj_colors = all_ajc_colors (g node) colored in
         let result_mod = result mod maxColor in
-          if List.mem result_mod adj_colors then raise InsufficentColorNumber
+          if List.mem result_mod adj_colors then (*raise InsufficentColorNumber*)
+            let missing = find_missing adj_colors maxColor in
+              if List.mem missing adj_colors then raise InsufficentColorNumber
+              else missing
           else result_mod;;
+          
+
+
+
+
+
 
 
 let colora (Grafo g) start maxcolor =
+  refValue := find_refValue maxcolor; 
+  print_string "ref: "; print_int !refValue; print_string "\n";
   let rec search visited colored = function (*frontiera*)
     [] -> colored
     | node::tail ->
