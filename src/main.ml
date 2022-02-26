@@ -57,7 +57,7 @@ let x = function        (* Successori *)
 (* Funzione principale *)
 let main =
     let res = colora grafo1 start maxColors in
-    print_colori res;
-    print_string "\n";;
+    print_colori res
+;;
 
 main ;;
