@@ -1,9 +1,10 @@
 fname = exe
 cc = ocamlc
 cflags = -c
+cexename =-o $(fname)
 
 exe: graphs printer main
-	$(cc) graphUtils.cmo printer.cmo main.cmo -o $(fname)
+	$(cc) $(cexename) graphUtils.cmo printer.cmo main.cmo
 
 
 graphs: graphUtils.ml graphUtils.mli
