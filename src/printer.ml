@@ -86,7 +86,8 @@ let menu () =
   "
   1) Grafo 1 funzionante
   2) Grafo 2 con numero sufficiente di colori
-  3) Grafo 2 con un numero di colori insufficiente per essere colorato\n\n"
+  3) Grafo 2 con un numero di colori insufficiente per essere colorato
+  4) Grafo 3 funzionante\n\n"
 ;;
 
 

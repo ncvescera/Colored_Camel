@@ -62,6 +62,27 @@ let grafo_2 =
 ;;
 
 
+
+let grafo_3 = 
+  let x = function
+      0 -> [1 ; 5]
+    | 1 -> [0; 2]
+    | 2 -> [5; 4; 3; 1; 6]
+    | 3 -> [2; 6]
+    | 4 -> [2]
+    | 5 -> [0; 2]
+    | 6 -> [2; 3]
+    | _ -> [] in
+    
+    let start = 0 in
+    let maxColori = 3 in
+    let g = Grafo x in
+
+    (g, start, maxColori)
+;;
+
+
+
 (*Permette di scegliere un grafo tra quelli di default*)
 (* Ogni grafo ha un id. Dato questo id ritorna il grafo:
     
@@ -79,5 +100,6 @@ let scegli_grafo id_grafo =
      1 -> grafo_1 
     |2 -> grafo_2
     |3 -> grafo_2_err
+    |4 -> grafo_3
     |_ -> raise exception_choise
   in aux id_grafo;; 
