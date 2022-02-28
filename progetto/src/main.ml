@@ -22,7 +22,7 @@ let scelta () =
 (*Avvia lo script in python per la rappresentazione del grafo*)
 (* Ignora il fatto che Sys.command ritorna un int*)
 let avvia_python () = 
-    let aux _ = () in aux (Sys.command "python rappresentazione_grafo/rappresentazione_grafo.py grafo.data")
+    let aux _ = () in aux (Sys.command "python rappresentazione_grafo.py grafo.data")
 ;;
 
 
