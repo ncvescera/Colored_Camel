@@ -242,3 +242,41 @@ let colora (Grafo g) partenza maxColori =
       
   in esplora [] [] [partenza]   (*avvia la ricerca e la colorazione, visitati=[], colorati=[], frontiera=[partenza]*)
 ;;
+
+
+
+
+
+
+
+
+(*Funzione per salvare un grafo colorato su file*)
+(* Dato un grafo e i suoi nodi colorati, salva su file il grafo nella forma:
+    nodo,vicini,colore nodo
+  
+    e.g.: il nodo 1 confina con i nodi 2, 0, 5, 6 ed ha il colore 0
+      1, 2 0 5 6,0
+
+  input:
+    g:        Grafo
+    colorati: Lista di coppie nodo - colore
+*)
+let grafodati_file = "grafo.data";; (*Nome del file su cui vengono salvati i dati del grafo*)
+let salva_grafo_colorato (Grafo g) colorati = 
+  let oc = open_out grafodati_file in           (*Apertura del file in scrittura*)
+    let rec salva_lista =                       (*Funzione ausiliaria per salvare su file una lista data*)
+      function (* lista *)
+         [x]      -> Printf.fprintf oc "%d" x   (* caso base, se la lista ha un solo elemento lo stampa (senza " ")*)
+        | x::coda ->                            (* caso ricorsivo, la lista ha più elementi*)            
+          Printf.fprintf oc "%d " x;            (*  stampa l'elemento*)
+          salva_lista coda                      (*  continua la ricorsione*)
+        | _ -> ()
+    in let rec salva =                                (*Funzione ausiliaria per salvare nodo - vicini - colore su file*)
+      function (* lista nodi_colorati *)
+         [] -> Printf.fprintf oc "\n"; close_out oc   (* caso base, la lista è finita. Stampo un \n e chiudo il file*)
+        |(nodo, colore)::coda ->                      (* caso ricorsivo, stampo nodo,lista vicini,colore nodo*)
+          Printf.fprintf oc "%d," nodo; salva_lista (g nodo); Printf.fprintf oc ","; Printf.fprintf oc "%d\n" colore; 
+          salva coda
+
+    in salva colorati (*avvia la funzione ausiliaria per salvare il grafo su file*)
+;;
