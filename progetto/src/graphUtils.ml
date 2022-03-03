@@ -1,5 +1,4 @@
 type grafo = Grafo of (int -> int list);;
-exception BadGraphCostruction;; (*??*)
 exception InsufficentColorNumber;;
 
 
