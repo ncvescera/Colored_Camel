@@ -1,10 +1,11 @@
-fname = exe
 cc = ocamlc
 cflags = -c
 cinclude = -I src
+
 srcdir = src
 buildir = build
 bindir = bin
+
 target = $(bindir)/exe
 
 .PHONY: clear
