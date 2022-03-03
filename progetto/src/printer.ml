@@ -169,3 +169,14 @@ let stampa_grafo (GraphUtils.Grafo g) partenza maxColori =
             )
 
   in search [] [partenza];; (*avvia la ricorsione con visitati=[] e frontiera=[partenza]*)
+
+
+
+
+
+
+
+let stampa_errore () = 
+  print_colore rosso_b "ERRORE: ";
+  print_string "Numero di colori insufficienti per colorare questo grafo !!\n"
+;;

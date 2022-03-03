@@ -54,7 +54,11 @@ let main () =
                             salva_grafo_colorato g colorati;                (* salva il grafo colorato per python*)
                             avvia_python ()                                 (* avvia python per mostrare a schermo il grafo*)
                         
-                                in avvia_colorazione dati  (*con un grafo scelto, lo colora*)
+                                in                                      (*con un grafo scelto, lo colora*)
+                                    try                                 (*se il numero di colori scelto è insufficiente, stampa un errore*)
+                                        avvia_colorazione dati  
+                                    with InsufficentColorNumber -> 
+                                        stampa_errore ()
 
 ;;
 
