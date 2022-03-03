@@ -1,7 +1,12 @@
 open GraphUtils;;
-exception BadChoice of string;;
+exception BadChoice;;
 
-let exception_choise = BadChoice "L'id selezionato è inesistente !!";;
+
+
+
+
+
+
 
 (*Grafo 1 *)
 let grafo_1 =
@@ -19,7 +24,6 @@ let grafo_1 =
 
   (g, start, maxColors)
 ;;
-
 
 
 
@@ -41,6 +45,8 @@ let grafo_2_err =
     
     (g, start, maxColors)
 ;;
+
+
 
 (*Grafo 2 *)
 (* con numero di Colori giusti *)
@@ -64,7 +70,7 @@ let grafo_2 =
 
 
 let grafo_3 = 
-  let x = function
+  let x = function            (* Successori *)
       0 -> [1 ; 5]
     | 1 -> [0; 2]
     | 2 -> [5; 4; 3; 1; 6]
@@ -74,9 +80,9 @@ let grafo_3 =
     | 6 -> [2; 3]
     | _ -> [] in
     
-    let start = 0 in
-    let maxColori = 3 in
-    let g = Grafo x in
+    let start = 0 in          (* Partenza *)
+    let maxColori = 3 in      (* Massimo numero di colori*)
+    let g = Grafo x in        (* Grafo effettivo *)
 
     (g, start, maxColori)
 ;;
@@ -88,16 +94,67 @@ let grafo_3 =
 
 
 let grafo_4 = 
-  let x = function
+  let x = function            (* Successori *)
       0 -> [1 ; 2; 3; 4]
     | _ -> [] in
     
-    let start = 0 in
-    let maxColori = 3 in
-    let g = Grafo x in
+    let start = 0 in          (* Partenza *)
+    let maxColori = 3 in      (* Massimo numero di colori*)
+    let g = Grafo x in        (* Grafo effettivo *)
 
     (g, start, maxColori)
 ;;
+
+
+
+
+
+
+
+(*Lista con tutti i grafi disponibili*)
+(* utilizzata per stampare i grafi disponibili*)
+(* Ogni elemento è una coppia del tipo grafo, descrizione
+
+    (un grafo è una coppia (successori, partenza, maxColori))
+*)
+let grafi = [
+  (grafo_1,       "Grafo 1"); 
+  (grafo_2,       "Grafo 2 con numero sufficiente di colori"); 
+  (grafo_2_err,   "Grafo 2 con un numero di colori insufficiente per essere colorato"); 
+  (grafo_3,       "Grafo 3"); 
+  (grafo_4,       "Grafo 4")
+];;
+
+
+
+
+
+
+
+(*Funzione che mostra tutti i grafi dispinibili*)
+(* Stampa in sequenza i grafi disponibili assegnandogli anche un ID:
+
+    e.g.: 
+
+    1) Grafo 1
+    2) Grafo 2 ...
+*)
+let stampa_grafi_disponibili () = 
+  let rec aux id = function (*lista di grafi*)
+     [] -> print_string "\n"                    (*caso base, stampa un \n*)
+    |x::coda ->                                 (*caso risocrsivo, stampa la descrizione del grafo con il suo id*)
+      let stampa_elemento (_, descrizione) = 
+        print_string "  ";
+        print_int id; print_string (") " ^ descrizione ^ "\n")
+      in stampa_elemento x; aux (id+1) coda     (*continua la ricorsione, aumenta di un l'id e continua con la coda*)
+
+    in aux 1 grafi
+;;
+
+
+
+
+
 
 
 (*Permette di scegliere un grafo tra quelli di default*)
@@ -113,11 +170,10 @@ let grafo_4 =
     id_grafo: Id del grafo che si vuole scegliere
 *)
 let scegli_grafo id_grafo =
-  let aux = function (*grafo id*)
-     1 -> grafo_1 
-    |2 -> grafo_2
-    |3 -> grafo_2_err
-    |4 -> grafo_3
-    |5 -> grafo_4
-    |_ -> raise exception_choise
-  in aux id_grafo;; 
+  let array_tmp = Array.of_list grafi in                  (*converte la lista in un array*)
+    if id_grafo > Array.length array_tmp || id_grafo < 1  (* controlla la validità dell'id*)
+      then 
+        raise BadChoice                                   (* se non è valido ritorna un eccezione*)
+    else
+      fst (Array.get array_tmp (id_grafo-1))              (*ritorna il grafo scelto*)
+;; 

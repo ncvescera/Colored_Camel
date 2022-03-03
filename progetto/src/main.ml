@@ -33,14 +33,14 @@ let avvia_python () =
 
 (*Funzione principale*)
 let main () = 
-    stampa_logo (); (*stampa il logo*)
-    menu ();        (*stampa il menu*)
+    stampa_logo ();                 (*stampa il logo*)
+    stampa_grafi_disponibili ();    (*stampa i grafi disponibili*)
 
     let dati = 
         let rec aux () =                    (*fa scegliere all'utente un numero che rappresenta il grafo*)
             try                             (* fin quando l'utente non sceglie un numero valido continua a chiedere u numero*)
                 scegli_grafo (scelta ())
-            with BadChoice _ -> 
+            with BadChoice -> 
                 aux () 
                 in aux() 
                     in let avvia_colorazione (g, partenza, maxColori) =                                     (*fa partire la funzione che colora il grafo*)
