@@ -23,9 +23,10 @@ def main(fname):
                 vicini = vicini.split(" ")                      # dalla stringa prende tutti i singoli vicini
                 colori.append(int(colore))                      # aggiunge il colore alla lista dei colori (converte in int)
                 
-                for vicino in vicini:                           # crea la lista di vicini (crea gli archi del grafo)
-                    tmp = (int(nodo), int(vicino))
-                    collegamenti.append(tmp)    
+                if vicini[0] != '':                             # controlla se il nodo ha vicini
+                    for vicino in vicini:                           # crea la lista di vicini (crea gli archi del grafo)
+                        tmp = (int(nodo), int(vicino))
+                        collegamenti.append(tmp)    
     
     nodi = trova_nodi(collegamenti)                             # controlla che abbia trovato tutti i nodi dalla sola analisi del file
     colori = aggiusta_colori(colori)                            # converte i colori da int a stringa hex per pyvis
