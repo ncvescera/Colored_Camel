@@ -10,10 +10,10 @@ target = $(bindir)/exe
 
 .PHONY: clear
 
-all: $(target)
+all: cartelle $(target)
+
 
 $(target): $(buildir)/graphUtils.cmo $(buildir)/printer.cmo $(buildir)/data.cmo $(buildir)/main.cmo
-	mkdir -p $(bindir) $(buildir)
 	$(cc) -o $@ $^
 	cp $(srcdir)/rappresentazione_grafo/rappresentazione_grafo.py $(bindir)
 
@@ -33,6 +33,10 @@ $(buildir)/data.cmo: $(srcdir)/data.mli $(srcdir)/data.ml
 $(buildir)/main.cmo: $(srcdir)/main.mli $(srcdir)/main.ml
 	$(cc) $(cinclude) $(cflags) $^
 	mv $(srcdir)/main.cmo $(buildir)
+
+
+cartelle:
+	mkdir -p $(bindir) $(buildir)
 
 
 clear:
