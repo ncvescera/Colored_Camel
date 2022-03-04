@@ -31,10 +31,6 @@ def main(fname):
     nodi = trova_nodi(collegamenti)                             # controlla che abbia trovato tutti i nodi dalla sola analisi del file
     colori = aggiusta_colori(colori)                            # converte i colori da int a stringa hex per pyvis
 
-    # print(nodi)
-    # print(collegamenti)
-    # print(colori)
-
     rappresenta_grafo(nodi, collegamenti, colori)               # rappresenta il grafo con pyvis
 
 
@@ -43,6 +39,7 @@ def trova_nodi (collegamenti):
         Questa funzione trova tutti i nodi presenti nel grafo.
         Utilizzata per controllare che tutti i nodi siano stati visti. Dalla sola scansione del file potrebbe non bastare
     """
+
     nodi = []
 
     for nodo, vicino in collegamenti:
@@ -59,10 +56,12 @@ def aggiusta_colori (colori):
     """
         Converte un colore (assegnato da Ocaml) in una stringa hex per pyvis
     """
+
     def colore_casuale ():
         """
             Genera un colore casuale in formato stringa hex (#rrggbb)
         """
+
         r = lambda: random.randint(0,255)
         return '#%02X%02X%02X' % (r(),r(),r())
 
@@ -79,6 +78,7 @@ def rappresenta_grafo (nodi, collegamenti, colori):
     """
         Rappresenta il grafo con pyvis.
     """
+
     net = Network(width='100%', height='600px', directed=False)
 
     net.add_nodes(nodi, color=colori)
@@ -92,3 +92,4 @@ def rappresenta_grafo (nodi, collegamenti, colori):
 
 if __name__ == "__main__":
     main(argv[1])
+ 
