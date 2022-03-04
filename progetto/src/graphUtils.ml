@@ -2,9 +2,6 @@ type grafo = Grafo of (int -> int list);;
 exception InsufficentColorNumber;;
 
 
-(* ------------------------------------------ *)
-
-
 
 
 
@@ -27,16 +24,17 @@ exception InsufficentColorNumber;;
       (1, 10) -> 1 = 1 ? SI -> 10
 
   input:
-    nodo:    Nodo di cui si vuole ottenere il colore
+    nodo:     Nodo di cui si vuole ottenere il colore
     colorati: Lista di nodi colorati
 *)
 let get_colore nodo colorati = 
   let rec aux nodo = function (*lista di nodi colorati*)
-      (x,y)::coda ->  (*caso ricorsivo, prende il primo elemento della forma (x,y)*)
-        if x = nodo     (*se l'elemento in questione è il nodo che cerco*)
-          then y        (* ritorna il colore del nodo*)
+      (x,y)::coda ->    (*caso ricorsivo, prende il primo elemento della forma (x,y)*)
+        if x = nodo     (*  se l'elemento in questione è il nodo che cerco*)
+          then y        (*    ritorna il colore del nodo*)
         else 
-          aux nodo coda (*continua con la ricorsione*)
+          aux nodo coda (*  continua con la ricorsione*)
+
       | _ -> (-1)       (*se la lista finisce vuol dire che il nodo non è colorato.*)
 
   in aux nodo colorati   (*avvia la ricorsione cone nodo=nodo lista_di_nodi_colorati=colorati*)
@@ -62,7 +60,7 @@ let get_colore nodo colorati =
       lista: Lista su cui trovare il massimo
 *)
 let rec max_lista = function   (* lista su cui trovare il massimo *)
-    [x]       -> x                      (*caso base, la lista ha un solo elemento. Ritrona lui come massimo*)
+     [x]      -> x                      (*caso base, la lista ha un solo elemento. Ritrona lui come massimo*)
     | x::coda -> max x (max_lista coda) (*caso ricorsivo, prende il primo elemento e trova il massimo tra lui e gli altri.*)
     | _       -> 0                      (*in tutti gli altri casi [per essere sicuro]*)
 ;;
@@ -90,7 +88,7 @@ let rec tutti_colori_vicini vicini colorati =
     | x::coda   ->             (*caso ricorsivo, esamina il primo nodo*)
       aux 
           (risultato@[get_colore x colorati]) (*aggiunge al risultato il colore del nodo analizzato*)
-          coda                                    (*toglie il nodo analizzato dalla lista e continua*)
+          coda                                (*toglie il nodo analizzato dalla lista e continua*)
   
   in aux [] vicini   (*avvia la ricorsione con risultato=[] e lista_di_nodi=vicini*)
 ;;
@@ -106,10 +104,11 @@ let rec tutti_colori_vicini vicini colorati =
       colorati: Lista di nodi colorati
 *)
 let max_colore_vicini (Grafo g) nodo colorati =
-  let vicini = (g nodo) in                          (*prende i vicini del nodo*)            
-    let colori_vicini = tutti_colori_vicini vicini colorati     (*prende tutti i colori dei vicini*)
-  in max_lista colori_vicini                            (*calcola il massimo tra tutti i colori presi*)
+  let vicini = (g nodo) in                                        (*prende i vicini del nodo*)            
+    let colori_vicini = tutti_colori_vicini vicini colorati in    (*  prende tutti i colori dei vicini*)
+      max_lista colori_vicini                            (*calcola il massimo tra tutti i colori presi*)
 ;;
+
 
 
 

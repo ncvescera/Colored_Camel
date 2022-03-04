@@ -38,7 +38,7 @@ let main () =
 
     let dati = 
         let rec aux () =                    (*fa scegliere all'utente un numero che rappresenta il grafo*)
-            try                             (* fin quando l'utente non sceglie un numero valido continua a chiedere u numero*)
+            try                             (* fin quando l'utente non sceglie un numero valido continua a chiedere un numero*)
                 scegli_grafo (scelta ())
             with BadChoice -> 
                 aux () 

@@ -69,6 +69,7 @@ let grafo_2 =
 
 
 
+(*Grafo 3 *)
 let grafo_3 = 
   let x = function            (* Successori *)
       0 -> [1 ; 5]
@@ -89,13 +90,11 @@ let grafo_3 =
 
 
 
-
-
-
-
+(*Grafo 4 *)
+(* definizione di un grafo con solo i successori del primo nodo*)
 let grafo_4 = 
   let x = function            (* Successori *)
-      0 -> [1 ; 2; 3; 4]
+      0 -> [1; 2; 3; 4]
     | _ -> [] in
     
     let start = 0 in          (* Partenza *)
@@ -141,14 +140,16 @@ let grafi = [
 *)
 let stampa_grafi_disponibili () = 
   let rec aux id = function (*lista di grafi*)
-     [] -> print_string "\n"                    (*caso base, stampa un \n*)
-    |x::coda ->                                 (*caso risocrsivo, stampa la descrizione del grafo con il suo id*)
+      []      -> print_string "\n"                    (*caso base, stampa un \n*)
+    | x::coda ->                                      (*caso risocrsivo, stampa la descrizione del grafo con il suo id*)
       let stampa_elemento (_, descrizione) = 
         print_string "  ";
         print_int id; print_string (") " ^ descrizione ^ "\n")
-      in stampa_elemento x; aux (id+1) coda     (*continua la ricorsione, aumenta di un l'id e continua con la coda*)
 
-    in aux 1 grafi
+      in  stampa_elemento x;                          (*continua la ricorsione, aumenta di 1 l'id e continua con la coda*)
+          aux (id+1) coda     
+
+    in aux 1 grafi  (*avvia la funzione con id=1 e lista_di_grafi=grafi*)
 ;;
 
 
@@ -173,7 +174,7 @@ let scegli_grafo id_grafo =
   let array_tmp = Array.of_list grafi in                  (*converte la lista in un array*)
     if id_grafo > Array.length array_tmp || id_grafo < 1  (* controlla la validità dell'id*)
       then 
-        raise BadChoice                                   (* se non è valido ritorna un eccezione*)
+        raise BadChoice                                   (* se non è valido lancia un'eccezione*)
     else
       fst (Array.get array_tmp (id_grafo-1))              (*ritorna il grafo scelto*)
 ;; 

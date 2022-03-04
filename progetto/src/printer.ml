@@ -89,6 +89,7 @@ let rec stampa_lista = function (* lista *)
       stampa_lista coda
 ;;
 
+
 (*Stampa un grafo dato*)
 (* Dato un grafo e il nodo di partenza stampa il grafo
     
@@ -116,7 +117,8 @@ let stampa_grafo (GraphUtils.Grafo g) partenza maxColori =
               search (visitati@[nodo]) (coda@(g nodo))
             )
 
-  in search [] [partenza];; (*avvia la ricorsione con visitati=[] e frontiera=[partenza]*)
+  in search [] [partenza]   (*avvia la ricorsione con visitati=[] e frontiera=[partenza]*)
+;;
 
 
 
@@ -128,6 +130,7 @@ let stampa_errore () =
   print_colore rosso_b "ERRORE: ";
   print_string "Numero di colori insufficienti per colorare questo grafo !!\n"
 ;;
+
 
 
 
@@ -155,6 +158,5 @@ let stampa_logo () =
 
   print_colore bianco_b "HELLO Utente 🦧 !\n";
   print_string "Coloriamo un po' di grafi 🖌️\n";
-  print_string "Di seguito trovi un elenco dei grafi di default tra cui puoi scegliere.\n\n";
-  
-  ;;
+  print_string "Di seguito trovi un elenco dei grafi di default tra cui puoi scegliere.\n\n"
+;;
