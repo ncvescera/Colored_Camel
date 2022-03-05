@@ -3,6 +3,9 @@
 \usepackage[utf8]{inputenc}
 
 \usepackage{dirtree}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
 
 %% links
 \usepackage{hyperref}
@@ -41,4 +44,56 @@
 	captionpos=b, % sets the caption-position to bottom
 	breaklines=true, % sets automatic line breaking
 	breakatwhitespace=false, 
+}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstdefinestyle{caml}{
+	backgroundcolor=\color{backcolour},   
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{magenta},
+	numberstyle=\tiny\color{codegray},
+	% basicstyle=\footnotesize,
+	breakatwhitespace=false,         
+	captionpos=b,                    
+	keepspaces=true,                 
+	numbers=left,                    
+	numbersep=5pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2,
+	language=caml,
+	columns=[c]fixed,
+	basicstyle=\small\ttfamily,
+	upquote=true,
+	breaklines=true,
+	showstringspaces=false,
+	stringstyle=\color{blue},
+	literate={'"'}{\textquotesingle "\textquotesingle}3
+}
+
+\lstdefinestyle{make}{
+	backgroundcolor=\color{backcolour},   
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{magenta},
+	numberstyle=\tiny\color{codegray},
+	breakatwhitespace=false,         
+	captionpos=b,                    
+	keepspaces=true,    
+	numbers=left,                    
+	numbersep=5pt,                  
+	showspaces=false,                
+	showtabs=false,                  
+	tabsize=2,
+	language=[gnu] make,
+	columns=[c]fixed,
+	basicstyle=\footnotesize,
+	upquote=true,
+	breaklines=true,
+	showstringspaces=false,
+	identifierstyle=\color{blue},
+	literate={'"'}{\textquotesingle "\textquotesingle}3
 }
