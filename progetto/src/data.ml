@@ -10,7 +10,7 @@ exception BadChoice;;
 
 (*Grafo 1 *)
 let grafo_1 =
-  let x = function        (* Successori *)
+  let x = function        
         0 -> [1; 2]
       | 1 -> [0; 2; 3]
       | 2 -> [0; 1]
@@ -18,11 +18,11 @@ let grafo_1 =
       | 4 -> [3]
       | 5 -> [6]
       | _ -> [] in
-  let start = 3 in         (* Partenza *)
-  let maxColors = 3 in     (* Massimo numero di colori*)
-  let g = Grafo x in       (* Grafo effettivo *)
+  let start = 3 in            (* Partenza *)
+  let maxColors = 3 in        (* Massimo numero di colori*)
+  let succ = Successori x in  (* Successori *)
 
-  (g, start, maxColors)
+  (Grafo (succ, start, maxColors))
 ;;
 
 
@@ -30,7 +30,7 @@ let grafo_1 =
 (*Grafo 2 *)
 (* con numero di Colori insufficienti *)
 let grafo_2_err = 
-  let x = function        (* Successori *)
+  let x = function        
         0 -> [1; 2; 3; 4; 5]
       | 1 -> [0; 3]
       | 2 -> [0; 5; 4]
@@ -39,11 +39,11 @@ let grafo_2_err =
       | 5 -> [0; 2; 4]
       | _ -> [] in
 
-    let start = 0 in         (* Partenza *)
-    let maxColors = 3 in     (* Massimo numero di colori*)
-    let g = Grafo x in       (* Grafo effettivo *)
+    let start = 0 in            (* Partenza *)
+    let maxColors = 3 in        (* Massimo numero di colori*)
+    let succ = Successori x in  (* Successori *)
     
-    (g, start, maxColors)
+    (Grafo (succ, start, maxColors))
 ;;
 
 
@@ -51,7 +51,7 @@ let grafo_2_err =
 (*Grafo 2 *)
 (* con numero di Colori giusti *)
 let grafo_2 = 
-  let x = function        (* Successori *)
+  let x = function        
         0 -> [1; 2; 3; 4; 5]
       | 1 -> [0; 3]
       | 2 -> [0; 5; 4]
@@ -60,18 +60,18 @@ let grafo_2 =
       | 5 -> [0; 2; 4]
       | _ -> [] in
 
-    let start = 0 in         (* Partenza *)
-    let maxColors = 4 in     (* Massimo numero di colori*)
-    let g = Grafo x in       (* Grafo effettivo *)
+    let start = 0 in            (* Partenza *)
+    let maxColors = 4 in        (* Massimo numero di colori*)
+    let succ = Successori x in  (* Successori *)
     
-    (g, start, maxColors)
+    (Grafo (succ, start, maxColors))
 ;;
 
 
 
 (*Grafo 3 *)
 let grafo_3 = 
-  let x = function            (* Successori *)
+  let x = function
       0 -> [1 ; 5]
     | 1 -> [0; 2]
     | 2 -> [5; 4; 3; 1; 6]
@@ -81,11 +81,11 @@ let grafo_3 =
     | 6 -> [2; 3]
     | _ -> [] in
     
-    let start = 0 in          (* Partenza *)
-    let maxColori = 3 in      (* Massimo numero di colori*)
-    let g = Grafo x in        (* Grafo effettivo *)
+    let start = 0 in            (* Partenza *)
+    let maxColori = 3 in        (* Massimo numero di colori*)
+    let succ = Successori x in  (* Successori *)
 
-    (g, start, maxColori)
+    (Grafo (succ, start, maxColori))
 ;;
 
 
@@ -93,15 +93,15 @@ let grafo_3 =
 (*Grafo 4 *)
 (* definizione di un grafo con solo i successori del primo nodo*)
 let grafo_4 = 
-  let x = function            (* Successori *)
+  let x = function
       0 -> [1; 2; 3; 4]
     | _ -> [] in
     
-    let start = 0 in          (* Partenza *)
-    let maxColori = 3 in      (* Massimo numero di colori*)
-    let g = Grafo x in        (* Grafo effettivo *)
+    let start = 0 in            (* Partenza *)
+    let maxColori = 3 in        (* Massimo numero di colori*)
+    let succ = Successori x in  (* Successori *)
 
-    (g, start, maxColori)
+    (Grafo (succ, start, maxColori))
 ;;
 
 
@@ -143,8 +143,7 @@ let stampa_grafi_disponibili () =
       []      -> print_string "\n"                    (*caso base, stampa un \n*)
     | x::coda ->                                      (*caso risocrsivo, stampa la descrizione del grafo con il suo id*)
       let stampa_elemento (_, descrizione) = 
-        print_string "  ";
-        print_int id; print_string (") " ^ descrizione ^ "\n")
+        print_string "  "; print_int id; print_string (") " ^ descrizione ^ "\n")
 
       in  stampa_elemento x;                          (*continua la ricorsione, aumenta di 1 l'id e continua con la coda*)
           aux (id+1) coda     
@@ -161,9 +160,9 @@ let stampa_grafi_disponibili () =
 (*Permette di scegliere un grafo tra quelli di default*)
 (* Ogni grafo ha un id. Dato questo id ritorna il grafo:
     
-    Grafo g, partenza, maxColori dove
+    succ, partenza, maxColori dove
 
-    Grafo g:    Grafo (funzione successori)
+    succ:       Funzione successori
     partenza:   nodo da cui partire
     maxColori:  numero massimo di colori da utilizzare per la colorazione
 

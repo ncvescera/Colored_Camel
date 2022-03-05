@@ -43,16 +43,15 @@ let main () =
             with BadChoice -> 
                 aux () 
                 in aux() 
-                    in let avvia_colorazione (g, partenza, maxColori) =                                     (*fa partire la funzione che colora il grafo*)
-                        print_string "\n";
-                        print_string "Il Grafo selezionato: \n\n"; stampa_grafo g partenza maxColori;       (*stampa il grafo nel terminale*)
+                    in let avvia_colorazione (Grafo (g, partenza, maxColori)) =                                     (*fa partire la funzione che colora il grafo*)
+                        print_string "\nIl Grafo selezionato: \n\n"; stampa_grafo (Grafo (g, partenza, maxColori)); (*  stampa il grafo nel terminale*)
                         
                         print_string "Coloro ...\n\n";
                         
-                        let colorati = colora g partenza maxColori in       (*colora il grfo*)
-                            stampa_nodi_colorati colorati;                  (* stampa il grafo colorato*)
-                            salva_grafo_colorato g colorati;                (* salva il grafo colorato per python*)
-                            avvia_python ()                                 (* avvia python per mostrare a schermo il grafo*)
+                        let colorati = colora (Grafo (g, partenza, maxColori)) in       (*colora il grfo*)
+                            stampa_nodi_colorati colorati;                              (* stampa il grafo colorato*)
+                            salva_grafo_colorato g colorati;                            (* salva il grafo colorato per python*)
+                            avvia_python ()                                             (* avvia python per mostrare a schermo il grafo*)
                         
                                 in                                      (*con un grafo scelto, lo colora*)
                                     try                                 (*se il numero di colori scelto è insufficiente, stampa un errore*)

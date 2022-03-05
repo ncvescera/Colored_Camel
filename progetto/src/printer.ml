@@ -99,10 +99,10 @@ let rec stampa_lista = function (* lista *)
       ...
 
   input:
-    g:        Grafo da stampare
+    succ:     Funzione successori
     partenza: Nodo di partenza
 *)
-let stampa_grafo (GraphUtils.Grafo g) partenza maxColori =
+let stampa_grafo (GraphUtils.Grafo((GraphUtils.Successori succ), partenza, maxColori)) =
   print_colore rosso_b "Partenza: ";
   print_int partenza; print_colore rosso_b " Max Colori: "; print_int maxColori;
   print_string "\n\n";
@@ -113,8 +113,8 @@ let stampa_grafo (GraphUtils.Grafo g) partenza maxColori =
             then search visitati coda
           else                          (* stampa il nodo ed i suoi vicini. Poi continua*)
             (
-              print_colore verde_b (string_of_int nodo); print_colore bianco_b " ➜ "; stampa_lista (g nodo); 
-              search (visitati@[nodo]) (coda@(g nodo))
+              print_colore verde_b (string_of_int nodo); print_colore bianco_b " ➜ "; stampa_lista (succ nodo); 
+              search (visitati@[nodo]) (coda@(succ nodo))
             )
 
   in search [] [partenza]   (*avvia la ricorsione con visitati=[] e frontiera=[partenza]*)
