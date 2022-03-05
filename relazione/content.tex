@@ -73,7 +73,7 @@ I file \lstinline[style=cmd]|.cmi| vengono lasciati all'interno della cartella \
 In questo progetto i grafi (si parla sempre di grafi \textit{orientati/diretti}) vengono rappresentati come una \textit{tupla} di 3 elementi:
 
 \begin{enumerate}
-	\item \textbf{\lstinline[style=cmd]|g|}: funzione successori che definisce tutti i successori (nodi vicini) di tutti i nodi del grafo
+	\item \textbf{\lstinline[style=cmd]|succ|}: funzione successori che definisce tutti i successori (nodi vicini) di tutti i nodi del grafo
 	\item \textbf{\lstinline[style=cmd]|start|}: nodo di partenza per la colorazione
 	\item \textbf{\lstinline[style=cmd]|maxColors|}: numero massimo di colori da utilizzare durante la colorazione
 \end{enumerate}
@@ -83,19 +83,19 @@ Di seguito un esempio di definizione di un grafo con la sua rappresentazione:
 	\begin{subfigure}[b]{.5\textwidth}
 \begin{lstlisting}[style=caml]
 let grafo_1 =
-	let x = function 
-		0 -> [1; 2]
+	let x = function        
+		  0 -> [1; 2]
 		| 1 -> [0; 2; 3]
 		| 2 -> [0; 1]
 		| 3 -> [1; 4]
 		| 4 -> [3]
 		| 5 -> [6]
-		| _ -> [] 		   in
-	let start = 3 	   in
-	let maxColors = 3  in
-	let g = Grafo x    in
+		| _ -> [] in
+	let start = 3 in
+	let maxColors = 3 in
+	let succ = Successori x in
 	
-	(g, start, maxColors)
+	(Grafo (succ, start, maxColors))
 ;;
 \end{lstlisting}
 \caption{Esempio di definizione di un grafo}
@@ -107,10 +107,11 @@ let grafo_1 =
 	\end{subfigure}%
 \end{figure}
 \ \\
-Il tipo \lstinline[style=cmd]|grafo| è definito in \lstinline[style=cmd]|graphUtils| nel seguente modo:
+Il tipo \lstinline[style=cmd]|grafo| e \lstinline[style=cmd]|succesori|  sono definiti in \lstinline[style=cmd]|graphUtils| nel seguente modo:
 
 \begin{lstlisting}[style=caml]
-	type grafo = Grafo of (int -> int list);;
+	type successori = Successori of (int -> int list);;
+	type grafo 			= Grafo of successori * int * int;;
 \end{lstlisting}
 
 \subsection{Data}
