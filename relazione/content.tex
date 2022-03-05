@@ -176,9 +176,68 @@ let scegli_grafo id_grafo =
 
 \subsection{Printer}
 
+In questo file risiedono tutte le funzioni e dichiarazioni che gestiscono la stampa a video. Vi è una definizione di caratteri per stampare su terminale (deve ovviamente supportare le emoji e i vari colori) caratteri colorati (rosso, verde, blu, ecc.), elementi in grassetto ed emoji. La funzione più degna di nota è \lstinline[style=cmd]|stampa_grafo| che, dato un grafo, stampa a schermo tutti i nodi con i suoi vicini (in pratica rappresenta la funzione successori).\\
+\ \\
+Di seguito alcuni dei codici utilizzati per rappresentare i colori nel terminale: 
+
+\begin{lstlisting}[style=caml, caption={Codici per i colori ed elementi in grassetto}]
+	type colore = Colore of string;;
+	
+	(* normali *)
+	let rosso = Colore "\027[31m";;
+	let verde = Colore "\027[32m";;
+	let ciano =  Colore "\027[36m";;
+	let bianco = Colore "\027[0m";;
+	
+	(* grassetto *)
+	let rosso_b = Colore "\027[31;1m";;
+	let verde_b = Colore "\027[32;1m";;
+	let ciano_b = Colore "\027[36;1m";;
+	let bianco_b = Colore "\027[0;1m";;
+	
+	(* valore di reset per stampare normalmente*)
+	let reset = bianco;;
+\end{lstlisting}
+
+\begin{figure}[H]
+\begin{subfigure}{\textwidth}
+\begin{lstlisting}[style=caml]
+let stampa_grafo (Grafo((Successori succ), partenza, maxColori)) =
+	print_colore rosso_b "Partenza: ";
+	print_int partenza; print_colore rosso_b " Max Colori: ";
+	print_int maxColori; print_string "\n\n";
+	let rec search visitati = function  (* frontiera *)
+		  [] 				 -> print_string "\n"    (*caso base, stampa \n*)      
+		| nodo::coda ->                      (*stampa nodo e vicini*)
+			if List.mem nodo visitati     (* ignora nodi visti*)
+				then 
+					search visitati coda
+			else                          (* stampa il nodo e vicini.*)
+				(print_colore verde_b (string_of_int nodo); 
+				print_colore bianco_b " -> "; stampa_lista (succ nodo); 
+				search (visitati@[nodo]) (coda@(succ nodo)))
+
+	in search [] [partenza]   (*avvia la ricorsione*)
+;;
+\end{lstlisting}
+\caption{Funzione per la stampa di un grafo su terminale}
+\end{subfigure}
+\ \\
+\ \\
+\begin{subfigure}{\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{img/grafoTerminale.png}
+	\caption{Output della funzione (a)}
+\end{subfigure}
+\end{figure}
+
+
+
 \subsection{GraphUtils}
 
 \subsection{Main}
+
+\subsection{Python}
 
 \subsection{Makefile}
 
