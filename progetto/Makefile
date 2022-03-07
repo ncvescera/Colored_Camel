@@ -35,12 +35,18 @@ $(buildir)/main.cmo: $(srcdir)/main.mli $(srcdir)/main.ml
 	mv $(srcdir)/main.cmo $(buildir)
 
 
-cartelle:
-	mkdir -p $(bindir) $(buildir)
+
+cartelle: $(buildir) $(bindir)
+
+$(buildir):
+	mkdir -p $@
+
+$(bindir):
+	mkdir -p $@
+
 
 
 clear:
 	rm -f $(buildir)/*.cmo
 	rm -f $(bindir)/*
 	rm -f $(srcdir)/*.cmi
-
