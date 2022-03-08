@@ -176,6 +176,7 @@ let scegli_grafo id_grafo =
 
 \subsection{Printer}
 
+%TODO: rileggere meglio, la parola "carattere" è ripetuta più volte
 In questo file risiedono tutte le funzioni e dichiarazioni che gestiscono la stampa a video. Vi è una definizione di caratteri per stampare su terminale (deve ovviamente supportare le emoji e i vari colori) caratteri colorati (rosso, verde, blu, ecc.), elementi in grassetto ed emoji. La funzione più degna di nota è \lstinline[style=cmd]|stampa_grafo| che, dato un grafo, stampa a schermo tutti i nodi con i suoi vicini (in pratica rappresenta la funzione successori).\\
 \ \\
 Di seguito alcuni dei codici utilizzati per rappresentare i colori nel terminale: 
@@ -231,9 +232,122 @@ let stampa_grafo (Grafo((Successori succ), partenza, maxColori)) =
 \end{subfigure}
 \end{figure}
 
-
-
 \subsection{GraphUtils}
+
+All'interno di questo file sono contenute tutte le funzioni e le espressioni che si occupano della gestione e  della colorazione dei grafi. In particolare, la funzione \lstinline[style=cmd]|colora| è quella che effettua la colorazione vera e propria. Prende in input un grafo (una tupla formata da \lstinline[style=cmd]|(successori, partenza, maxColori)|) e come output restituisce una lista composta da coppie del tipo \lstinline[style=cmd]|(nodo, colore)|, associa quindi ad ogni nodo (\lstinline[style=cmd]|int|) un colore (\lstinline[style=cmd]|int|). Alla riga \lstinline[style=cmd]|2| viene calcolato il \lstinline[style=cmd]|refValue| (servirà successivamente per cercare di trovare un possibile colore da assegnare qualora i vicini del nodo siano già stati colorati); nella riga \lstinline[style=cmd]|3| viene definita la funzione ausiliaria \lstinline[style=cmd]|esplora| che, tramite un algoritmo di ricerca in ampiezza (\textit{BFS}) andrà ad esplorare i nodi del grafo:
+
+\begin{itemize}
+	\item Se, il nodo esaminato è già stato visitato (è presente nella lista \lstinline[style=cmd]|visitati|) lo ignora e continua richiamando se stessa ed estraendo un nuovo nodo dalla frontiera (righe \lstinline[style=cmd]|7 - 9|)
+	\item Altrimenti (il nodo non è mai stato analizzato), 
+		\begin{itemize}
+			\item aggiunge il nodo alla frontiera (lista di nodi da visitare),
+			\item se possibile colora il nodo (aggiunge la coppia \lstinline[style=cmd]|nodo, colore| alla lista \lstinline[style=cmd]|colorati|), in caso contrario verrà sollevata un'eccezione, 
+			\item infine aggiunge alla frontiera i nodi vicini al nodo esaminato. 
+		\end{itemize}
+	Richiama quindi se stessa con le nuove liste continuando così la ricorsione (righe \lstinline[style=cmd]|11 - 18|)
+\end{itemize}
+\ \\
+Questa esplorazione avrà fine quando la frontiera non conterrà più nodi da esplorare.
+La riga \lstinline[style=cmd]|20| serve per avviare la ricorsione (e quindi l'esplorazione) impostando le liste \lstinline[style=cmd]|vicini| e \lstinline[style=cmd]|colorati| come vuote e la frontiera con il nodo di partenza al suo interno. 
+
+
+
+\begin{lstlisting}[style=camlt, caption={Funzione che si occupa della colorazione di un grafo.}, label=colora]
+let colora (Grafo ((Successori succ), partenza, maxColori)) =
+	refValue := calcola_refValue maxColori;   (*per colore mancante*)
+	let rec esplora visitati colorati = 
+		function (*frontiera*)
+		 	  []            -> colorati  (*colorazione finita*)
+			| nodo::coda    ->           (*continua a colorare*)
+				if List.mem nodo visitati              (*nod visitato*)
+					then 			(* ignora il nodo, successivo di frontiera*)
+						esplora visitati colorati coda  
+
+				else 	(*espande nodi vicini*)
+					esplora 
+						(visitati@[nodo])       (*nodo visitato*)
+						(colorati@[
+							(nodo, 
+							(scegli_colore (Successori succ) nodo colorati maxColori)
+							)]) (*colora il nodo*)
+						(coda@(succ nodo))      (*aggiunge vicini a frontiera*)
+
+	in esplora [] [] [partenza]   (*avvia esplora*)
+;;
+\end{lstlisting}
+\ \\
+Un'altra funzione molto importante all'interno di questo file è \lstinline[style=cmd]|scegli_colore|, che dati in input la \textit{funzione successori}, il \textit{nodo} da colorare, la lista dei \textit{nodi colorati} e il \textit{numero massimo di colori}, restituisce un colore (\lstinline[style=cmd]|int|) se possibile, altrimenti lancia un'eccezione (il numero di colori scelto è insufficiente per colorare il grafo). Alla riga \lstinline[style=cmd]|2, 7| viene scelto un potenziale risultato che è dato dal massimo tra i colori vicini al nodo aumentato di 1, in modulo \lstinline[style=cmd]|maxColori|. Così facendo ottengo una scelta ciclica dei colori, potendo ritornare a scegliere il colore 0 quando tutti gli altri sono stati assegnati.
+
+\[
+	risultato\_mod = (\max(colori\_vicini) + 1) \bmod maxColori
+\]
+\ \\
+Quando un nodo non è stato colorato gli viene assegnato il valore \lstinline[style=cmd]|-1|, questo non inficia nel calcolo descritto prima: supponiamo di star analizzando il nodo iniziale, quindi sia lui che tutti i suoi vicini non hanno colore (colore = \lstinline[style=cmd]|-1|), il massimo risulterà essere \lstinline[style=cmd]|-1|. Il colore scelto sarà quindi \lstinline[style=cmd]|0| e verrà assegnato al nodo iniziale, tutto funziona come previsto.\\
+\ \\
+Infine viene analizzato questo possibile risultato (righe \lstinline[style=cmd]|8 - 16|):
+
+\begin{itemize}
+	\item Se il colore scelto è presente tra i colori dei nodi vicini (un nodo vicino ha già lo stesso colore), tenta di trovare un colore valido: somma tutti i colori vicini al nodo e sottrae questo valore al \lstinline[style=cmd]|refValue|. Se questo nuovo colore è ancora uguale ad un colore vicino al nodo, viene lanciata un'eccezione dato che non è possibile risolvere il problema, altrimenti viene ritornato come nuovo colore (righe \lstinline[style=cmd]|8 - 15|).
+	\item Se non lo è allora vuol dire che è stato scelto il giusto colore e viene ritornato.
+\end{itemize}
+\ \\
+In questo modo, mi assicuro che ad ogni passaggio viene scelto il colore giusto e non necessito di dover ricontrollare tutto il grafo nuovamente.
+\begin{lstlisting}[style=camlt, caption={Funzione ausiliaria a \autoref{colora} che sceglie un colore per il nodo (se possibile).}]
+	let scegli_colore (Successori succ) nodo colorati maxColori = 
+		let risultato = 	(*trova il massimo tra i colori vicin al nodo +1*)
+			((max_colore_vicini (Successori succ) nodo colorati)+1) in
+		
+		(*trova tutti i colri vicini*)
+		let colori_vicini = tutti_colori_vicini (succ nodo) colorati in            
+		let risultato_mod = risultato mod maxColori in  (*calcola il modulo*)
+			if List.mem risultato_mod colori_vicini  
+				then 	 (*colore scelto = colore vicino*)
+					let mancante = 	(* prova scegliere un altro colore*)
+						trova_mancante colori_vicini maxColori in     
+							if List.mem mancante colori_vicini 
+								(* numero di colori insufficiente *)
+								then raise InsufficentColorNumber                             
+							else mancante	(*ritorna colore mancante*)
+			else risultato_mod	(*trovato un colore valido*)
+;;
+\end{lstlisting}
+%TODO: cercare di aggiungere un esempio di come funziona questo calcolo
+\ \\
+Infine un breve sguardo alla funzione che si occupa di salvare i dati del grafo colorato su file per poterli poi processare da python e mostrare una versione interattiva del grafo a video. Viene scandita tutta la lista prodotta dalla funzione \autoref{colora} (lista di coppie \lstinline[style=cmd]|nodo, colore|) e per ogni elemento viene scritto  su file: 
+
+\begin{center}
+	\lstinline[style=cmd]|nodo,vicini,colore|
+\end{center}
+\ \\
+Un esempio: \lstinline[style=cmd]|0,1 2 9 3,1|. Questo vuol dire che il nodo \lstinline[style=cmd]|0| ha come vicini \lstinline[style=cmd]|1, 2, 9, 3| e come colore \lstinline[style=cmd]|1|. Nelle righe \lstinline[style=cmd]|4 - 10| viene definita una funzione ausiliaria che permette di salvare la lista dei nodi adiacenti e la parte di codice che effettua le operazioni descritte prima è nelle righe \lstinline[style=cmd]|12 - 21|.
+
+\begin{lstlisting}[style=camlt, caption={Funzione che salva un grafo su file.}]
+let grafodati_file = "grafo.data";; (*file dove salvare il grafo*)
+let salva_grafo_colorato (Successori succ) colorati = 
+	let oc = open_out grafodati_file in	(*apertura file in scrittura*)
+		let rec salva_lista =   (*salva su file una lista*)
+			function (* lista *)
+				 [x]      -> Printf.fprintf oc "%d" x   (* caso base*)
+				| _ 		  -> ()
+				| x::coda ->                            (* caso ricorsivo*)            
+					Printf.fprintf oc "%d " x;         (* stampa l'elemento*)
+					salva_lista coda                   (* continua*)
+				
+		in let rec salva =      (*salva nodo - vicini - colore su file*)
+			function (* lista nodi_colorati *)
+				 []  -> 
+				 	Printf.fprintf oc "\n"; 
+				 	close_out oc  (*chiude file*)
+				|(nodo, colore)::coda -> (* salva nodo,vicini,colore*)
+					Printf.fprintf oc "%d," nodo; 
+					salva_lista (succ nodo); Printf.fprintf oc ","; 
+					Printf.fprintf oc "%d\n" colore; 
+					salva coda	(*continua*)
+
+	in salva colorati (*avvia salva*)
+;;
+\end{lstlisting}
+
 
 \subsection{Main}
 
@@ -275,6 +389,9 @@ $(target):
 		cp $(srcdir)/rappresentazione_grafo/rappresentazione_grafo.py $(bindir)
 
 \end{lstlisting}
+
+%TODO: aggiungere una descrizione per il comando make clear
+
 \section{Dimostrazione}
 %TODO: aggiungere foto e mostrare come funziona in pratica il progetto.
 
