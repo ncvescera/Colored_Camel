@@ -351,8 +351,105 @@ let salva_grafo_colorato (Successori succ) colorati =
 
 \subsection{Main}
 
+In questo file è presenta la funzione principale \lstinline[style=cmd]|main| che si occupa di gestire tutto il flusso del programma: stampa il menu iniziale, fa scegliere all'utente su quale grafo testare l'algoritmo di colorazione, avvia la colorazione del grafo selezionato, stampa il risultato ed avvia lo script python.
+
+\begin{lstlisting}[style=camlt, caption={Parte del codice contenuto in main.ml }]
+let main () = 
+	stampa_logo ();                 (*stampa il logo*)
+	stampa_grafi_disponibili ();    (*stampa i grafi disponibili*)
+
+	let dati = 
+		let rec aux () =               (*utente sceglie il grafo*)
+			try                          (*controllo input valido*)
+				scegli_grafo (scelta ())
+			with BadChoice -> 
+				aux () 
+		in aux() 
+			in let avvia_colorazione (Grafo (g, partenza, maxColori)) = 
+				print_string "\nIl Grafo selezionato: \n\n"; 
+				stampa_grafo (Grafo (g, partenza, maxColori)); 
+				print_string "Coloro ...\n\n";
+				 
+				(*colora il grfo*)
+				let colorati = colora (Grafo (g, partenza, maxColori)) in     
+					stampa_nodi_colorati colorati;   (*stampa il grafo colorato*)
+					salva_grafo_colorato g colorati; (*salva grafo colorato*)
+					avvia_python ()                  (* avvia python*)
+
+					in      (*con un grafo scelto, lo colora*)
+						try                                
+							avvia_colorazione dati  
+						with InsufficentColorNumber -> 
+							stampa_errore ()
+;;
+
+\end{lstlisting}
+\ \\
+Alla riga \lstinline[style=cmd]|2 - 3| viene stampato sul terminale il logo iniziale e tutti i grafi disponibili per testare l'algoritmo. Nelle successive righe( \lstinline[style=cmd]|5 - 27|) vengono definite alcune funzioni ausiliarie per mettere in pratica i comportamenti descritti prima:
+
+\begin{itemize}
+	\item \lstinline[style=cmd]|dati|: rimane fermo sulla scelta del grafo fin quando l'utente non seleziona un ID esistente. %TODO: scrivere meglio
+	\item \lstinline[style=cmd]|avvia_colorazione|: stampa alcune informazioni utili all'utente per poi colorare il grafo, salvarlo su file e avviare lo script python
+\end{itemize}
+\ \\
+Nelle prime righe del file vengono inclusi gli altri file descritti prima con:
+
+\begin{lstlisting}[style=caml, caption={Inclusione degli altri file .ml}]
+ open Printer;;
+ open GraphUtils;;
+ open Data;;
+\end{lstlisting}
 \subsection{Python}
 
+All'interno del progetto è anche presente un breve script in python che verrà avviato una volta riuscito a colorare il grafo. Questo script legge il file \lstinline[style=cmd]|.data| (contiene il grafo ed i colori di ogni nodo) generato da OCaml e lo rappresenta all'interno di una finestra in modo interattivo e soprattutto più comprensibile rispetto alla visualizzazione su terminale.
+\begin{lstlisting}[style=python, caption={Alcune funzioni dello script python}]
+from pyvis.network import Network
+
+
+def main(fname):
+	collegamenti = []
+	nodi = []
+	colori = []
+
+	# lettura dei dati da file
+	with open(fname, 'r') as f:
+		for text in f.readlines():
+		text = text.strip("\n")               # elimina i vari \n nel file
+		if text != '':                        # controlla che la riga sia valida
+			nodo, vicini, colore  = text.split(",")  # prende nodo, vicini e colore
+
+			vicini = vicini.split(" ")  				 	 	 # prende i vicini
+			colori.append(int(colore))               # aggiunge il colore alla lista
+
+			if vicini[0] != '':                # controlla se il nodo ha vicini
+				for vicino in vicini:            # crea gli archi del grafo
+					tmp = (int(nodo), int(vicino))
+					collegamenti.append(tmp)    
+
+	nodi = trova_nodi(collegamenti) 
+	colori = aggiusta_colori(colori)  # converte i colori per pyvis
+	
+	# rappresenta il grafo con pyvis
+	rappresenta_grafo(nodi, collegamenti, colori) 
+ 
+ 
+ def rappresenta_grafo (nodi, collegamenti, colori):
+	net = Network(width='100%', height='600px', directed=False)
+ 
+ 	net.add_nodes(nodi, color=colori)
+ 	net.add_edges(collegamenti)
+ 	net.toggle_physics(True)
+ 	net.inherit_edge_colors(False)
+ 
+ 	net.show('rappresentazione_grafo.html')
+   		
+\end{lstlisting}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=.7\textwidth]{img/grafocoloratopy.png}
+	\caption{Output dello script python.}
+\end{figure}
 \subsection{Makefile}
 
 File utilizzato per la compilazione del progetto che avviene tramite il comando \lstinline[style=cmd]|make|. 
@@ -394,8 +491,78 @@ $(target):
 
 \section{Dimostrazione}
 %TODO: aggiungere foto e mostrare come funziona in pratica il progetto.
+%TODO: forse può essere suddiviso in sottocapitoli
+Di seguito andremo a vedere una breve guida/dimostrazione del funzionamento del progetto, dalla compilazione iniziale fino al grafo colorato.
 
+\subsection{Compilazione}
+Per prima cosa è necessario compilare il progetto. Bisogna spostarsi all'interno della cartella \lstinline[style=cmd]|progetto|, dove è contenuto il file \lstinline[style=cmd]|Makefile| e la cartella \lstinline[style=cmd]|src|. Ora avviare la compilazione con il comando:
 
+\begin{center}
+	\lstinline[style=cmd]|make|
+\end{center}
+\ \\
+Verranno create due nuove cartelle: 
 
+\begin{itemize}
+	\item \lstinline[style=cmd]|bin|: al suo interno ci sarà l'eseguibile \lstinline[style=cmd]|exe| ed altri file necessari al funzionamento del progetto
+	\item \lstinline[style=cmd]|build|: conterrà tutti i file generati durante la fase di compilazione (\lstinline[style=cmd]|.cmo|)
+\end{itemize}
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{img/make.png}
+	\caption{Output del comando make}
+\end{figure}
+\ \\
+Qualora si voglia ripulire tutti i file generati da questa operazione è possibile tramite il comando:
 
+\begin{center}
+	\lstinline[style=cmd]|make clear|
+\end{center}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{img/makeclear.png}
+	\caption{Output del comando make clear}
+\end{figure}
+
+\subsection{Esecuzione}
+
+Per avviare l'eseguibile del progetto generato alla fase precedente è prima necessario spostarsi all'interno della cartella \lstinline[style=cmd]|bin|:
+
+\begin{center}
+	\lstinline[style=cmd]|cd bin|\\
+	\lstinline[style=cmd]|./exe  |
+\end{center}
+\ \\
+Verrà inizialmente mostrato il menù iniziale e l'utente dovrà scegliere quale grafo utilizzare per testare l'algoritmo di colorazione.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{img/menu.png}
+	\caption{Menu iniziale}
+\end{figure}
+\ \\
+Se viene inserito un ID invalido, si rimane bloccati in questa scelta fin quando un ID esistente non viene inserito.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{img/badid.png}
+	\caption{Esempio di multipli ID errati}
+\end{figure}
+\ \\
+Una volta selezionato un ID valido verrà stampato a video il grafo, con il nodo di partenza, il massimo numero di colori ed il risultato della fase di colorazione.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{img/grafo1bin.png}
+	\caption{Esempio di colorazione di un grafo}
+\end{figure}
+\ \\
+Infine verrà avviato lo script python che aprirà una finestra con al suo interno il grafo disegnato.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{img/termgrafo.png}
+	\caption{Finestra aperta da python con terminale affiancato}
+\end{figure}
