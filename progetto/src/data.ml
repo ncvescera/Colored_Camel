@@ -106,6 +106,30 @@ let grafo_4 =
 
 
 
+(*Grafo 5 *)
+(* definizione di un grafo con solo i successori del primo nodo*)
+let grafo_5 = 
+  let x = function
+       0 -> [1; 2; 6; 7]
+    |  1 -> [0; 8]
+    |  2 -> [0; 3]
+    |  3 -> [2;4;5]
+    |  4 -> [3;5]
+    |  5 -> [3;4;10]
+    |  6 -> [0;5]
+    |  7 -> [0;8]
+    |  8 -> [1;7]
+    | _  -> [] in
+    
+    let start = 0 in            (* Partenza *)
+    let maxColori = 2 in        (* Massimo numero di colori*)
+    let succ = Successori x in  (* Successori *)
+
+    (Grafo (succ, start, maxColori))
+;;
+
+
+
 
 
 
@@ -121,7 +145,8 @@ let grafi = [
   (grafo_2,       "Grafo 2 con numero sufficiente di colori"); 
   (grafo_2_err,   "Grafo 2 con un numero di colori insufficiente per essere colorato"); 
   (grafo_3,       "Grafo 3"); 
-  (grafo_4,       "Grafo 4")
+  (grafo_4,       "Grafo 4");
+  (grafo_5,       "Grafo 5")
 ];;
 
 
