@@ -2,8 +2,8 @@
 L'obiettivo di questo progetto è quello di realizzare un programma scritto in \textbf{OCaml} che risolva il \textit{problema} della \textit{colorazione di un grafo}: riuscire a colorare, se possibile, ogni nodo del grafo in modo da non avere mai nodi adiacenti con lo stesso colore. In via più formale, dato un grafo \lstinline[style=cmd]|g| ed un numero massimo di colori utilizzabili \lstinline[style=cmd]|N|, assegnare un colore ( da $0$ a $N-1$) ai nodi in modo tale che non esistano nodi adiacenti con lo stesso colore; qualora il numero di colori \lstinline[style=cmd]|N| non sia sufficiente per realizzare la colorazione, riportare un errore.
  
 \section{Struttura del Progetto}
-%TODO: aggiungere la struttura del progetto. forse va bene una foto o il risultato di un LS.
-Di seguito sarà riportata la struttura delle cartelle e dei file del progetto con una breve descrizione per quelli più importanti. I file OCaml sono divisi in base al compito che svolgono le funzioni al loro interno (\textit{e.g.: \lstinline[style=cmd]|graphUtils| conterrà le funzioni che operano sui grafi, ecc.}) e sono sempre formati da un file \lstinline[style=cmd]|.ml| che contiene il copro della funzione con tutte le varie espressioni ed un file \lstinline[style=cmd]|.mli| nel quale è presente solo il tipo delle funzioni ed espressioni che verranno utilizzate dagli altri file. %TODO: rivedere meglio
+
+Di seguito sarà riportata la struttura delle cartelle e dei file del progetto con una breve descrizione per quelli più importanti. I file OCaml sono divisi in base al compito che svolgono le funzioni al loro interno (\textit{e.g.: \lstinline[style=cmd]|graphUtils| conterrà le funzioni che operano sui grafi, ecc.}) e sono sempre formati da un file \lstinline[style=cmd]|.ml| che contiene il copro delle funzioni con tutte le varie espressioni ed un file \lstinline[style=cmd]|.mli| nel quale è presente solo il tipo delle funzioni ed espressioni che verranno utilizzate dagli altri file.
 
 \begin{figure}[H]
 	\dirtree{%
@@ -25,12 +25,12 @@ Di seguito sarà riportata la struttura delle cartelle e dei file del progetto c
 \end{figure}
 
 \begin{itemize}
-	\item \lstinline[style=cmd]|Makefile|: utilizzato per compilare il progetto e generare l'eseguibile per avviarlo (vedere ...)	%TODO: aggiungere riferimento
+	\item \lstinline[style=cmd]|Makefile|: utilizzato per compilare il progetto e generare l'eseguibile per avviarlo
 	\item \lstinline[style=cmd]|main|: contiene la funzione principale che si occupa di avviare la colorazione e di gestire le scelte fatte dall'utente
 	\item \lstinline[style=cmd]|graphUtils|: insieme di funzioni che operano sui grafi che svolgono l'effettivo compito di colorazione
 	\item \lstinline[style=cmd]|data|: insieme di grafi per testare il corretto funzionamento del progetto. Questi possono essere aggiunti e rimossi in modo semplice ed efficiente
 	\item \lstinline[style=cmd]|printer|: insieme di funzioni ed espressioni per stampare a video menu ed altri elementi con anche la presenza di colori ed emoji
-	\item \lstinline[style=cmd]|rappresentazione\_grafo|: script in python per rappresentare a video (in modo interattivo) un grafo
+	\item \lstinline[style=cmd]|rappresentazione_grafo|: script in python per rappresentare a video (in modo interattivo) un grafo
 \end{itemize}
 \ \\
 Una volta utilizzato il comando \lstinline[style=cmd]|make| per compilare il progetto, la struttura finale delle cartelle sarà la seguente:
@@ -113,7 +113,7 @@ Il tipo \lstinline[style=cmd]|grafo| e \lstinline[style=cmd]|succesori|  sono de
 	type successori = Successori of (int -> int list);;
 	type grafo 			= Grafo of successori * int * int;;
 \end{lstlisting}
-
+\newpage
 \subsection{Data}
 In questo file ci sono tutte le definizioni dei grafi utilizzati come test per verificare il corretto funzionamento dell'algoritmo di colorazione, una funzione che permette di stampare un menù per la selezione di un grafo (con la descrizione del grafo e un ID unico) da parte dell'utente ed una funzione che dato un numero, ritorna uno dei grafi detti prima.
 \`{E} anche presente una lista \lstinline[style=cmd]|grafi| che contiene tutti i grafi disponibili con una descrizione (una coppia \lstinline[style=cmd]|(grafo, string)|), è questa che permette di aggiungere e togliere grafi in maniera semplice e senza dover modificare alcuna funzione.
@@ -160,7 +160,7 @@ let stampa_grafi_disponibili () =
 \end{figure}
 
 \ \\
-Infine, al funzione \lstinline[style=cmd]|scegli_grafo| che, dato un ID, ritorna il relativo grafo. \`{E} interessante notare come per selezionare un dato grafo non viene scorsa ricorsivamente tutta la lista, ma quest'utlima viene convertita in un \lstinline[style=cmd]|Array| per poter utilizzare il metodo \lstinline[style=cmd]|get| per accedere all'i-esima posizione. Vengono effettuati alcuni controlli sull'input: viene controllato se l'ID passato è valido (non superi per eccesso, o per difetto gli ID mostrati a video) e nel caso solleva un'eccezione (verrà utilizzata nella funzione \lstinline[style=cmd]|main| per segnalare il problema). %TODO: aggiungere riferimento
+Infine, la funzione \lstinline[style=cmd]|scegli_grafo| che, dato un ID, ritorna il relativo grafo. \`{E} interessante notare come per selezionare un dato grafo non viene scorsa ricorsivamente tutta la lista, ma quest'utlima viene convertita in un \lstinline[style=cmd]|Array| per poter utilizzare il metodo \lstinline[style=cmd]|get| per accedere all'i-esima posizione. Vengono effettuati alcuni controlli sull'input: viene controllato se l'ID passato è valido (non superi per eccesso, o per difetto gli ID mostrati a video) e nel caso solleva un'eccezione (verrà utilizzata nella funzione \lstinline[style=cmd]|main| per segnalare il problema). %TODO: aggiungere riferimento
 
 \begin{lstlisting}[style=caml, caption={Funzione che ritorna il grafo selezionato}]
 let scegli_grafo id_grafo =
@@ -241,18 +241,16 @@ All'interno di questo file sono contenute tutte le funzioni e le espressioni che
 	\item Altrimenti (il nodo non è mai stato analizzato), 
 		\begin{itemize}
 			\item aggiunge il nodo alla frontiera (lista di nodi da visitare),
-			\item se possibile colora il nodo (aggiunge la coppia \lstinline[style=cmd]|nodo, colore| alla lista \lstinline[style=cmd]|colorati|), in caso contrario verrà sollevata un'eccezione, 
+			\item se possibile colora il nodo (aggiunge la coppia \lstinline[style=cmd]|(nodo, colore)| alla lista \lstinline[style=cmd]|colorati|), in caso contrario verrà sollevata un'eccezione, 
 			\item infine aggiunge alla frontiera i nodi vicini al nodo esaminato. 
 		\end{itemize}
 	Richiama quindi se stessa con le nuove liste continuando così la ricorsione (righe \lstinline[style=cmd]|11 - 18|)
 \end{itemize}
 \ \\
 Questa esplorazione avrà fine quando la frontiera non conterrà più nodi da esplorare.
-La riga \lstinline[style=cmd]|20| serve per avviare la ricorsione (e quindi l'esplorazione) impostando le liste \lstinline[style=cmd]|vicini| e \lstinline[style=cmd]|colorati| come vuote e la frontiera con il nodo di partenza al suo interno. 
+La riga \lstinline[style=cmd]|20| serve per avviare la ricorsione (e quindi l'esplorazione) impostando le liste \lstinline[style=cmd]|vicini| e \lstinline[style=cmd]|colorati| come vuote e la frontiera con il nodo di partenza al suo interno. \\
 
-
-
-\begin{lstlisting}[style=camlt, caption={Funzione che si occupa della colorazione di un grafo.}, label=colora]
+\begin{lstlisting}[style=caml, caption={Funzione che si occupa della colorazione di un grafo.}, label=colora]
 let colora (Grafo ((Successori succ), partenza, maxColori)) =
 	refValue := calcola_refValue maxColori;   (*per colore mancante*)
 	let rec esplora visitati colorati = 
@@ -281,7 +279,8 @@ Un'altra funzione molto importante all'interno di questo file è \lstinline[styl
 \[
 	risultato\_mod = (\max(colori\_vicini) + 1) \bmod maxColori
 \]
-\ \\
+
+\pagebreak
 Quando un nodo non è stato colorato gli viene assegnato il valore \lstinline[style=cmd]|-1|, questo non inficia nel calcolo descritto prima: supponiamo di star analizzando il nodo iniziale, quindi sia lui che tutti i suoi vicini non hanno colore (colore = \lstinline[style=cmd]|-1|), il massimo risulterà essere \lstinline[style=cmd]|-1|. Il colore scelto sarà quindi \lstinline[style=cmd]|0| e verrà assegnato al nodo iniziale, tutto funziona come previsto.\\
 \ \\
 Infine viene analizzato questo possibile risultato (righe \lstinline[style=cmd]|8 - 16|):
@@ -290,9 +289,10 @@ Infine viene analizzato questo possibile risultato (righe \lstinline[style=cmd]|
 	\item Se il colore scelto è presente tra i colori dei nodi vicini (un nodo vicino ha già lo stesso colore), tenta di trovare un colore valido: somma tutti i colori vicini al nodo e sottrae questo valore al \lstinline[style=cmd]|refValue|. Se questo nuovo colore è ancora uguale ad un colore vicino al nodo, viene lanciata un'eccezione dato che non è possibile risolvere il problema, altrimenti viene ritornato come nuovo colore (righe \lstinline[style=cmd]|8 - 15|).
 	\item Se non lo è allora vuol dire che è stato scelto il giusto colore e viene ritornato.
 \end{itemize}
-\ \\
-In questo modo, mi assicuro che ad ogni passaggio viene scelto il colore giusto e non necessito di dover ricontrollare tutto il grafo nuovamente.
-\begin{lstlisting}[style=camlt, caption={Funzione ausiliaria a \autoref{colora} che sceglie un colore per il nodo (se possibile).}]
+
+In questo modo, mi assicuro che ad ogni passaggio viene scelto il colore giusto e non necessito di dover ricontrollare tutto il grafo nuovamente.\\
+
+\begin{lstlisting}[style=caml, caption={Funzione ausiliaria a \autoref{colora} che sceglie un colore per il nodo (se possibile).}]
 	let scegli_colore (Successori succ) nodo colorati maxColori = 
 		let risultato = 	(*trova il massimo tra i colori vicin al nodo +1*)
 			((max_colore_vicini (Successori succ) nodo colorati)+1) in
@@ -312,16 +312,16 @@ In questo modo, mi assicuro che ad ogni passaggio viene scelto il colore giusto 
 ;;
 \end{lstlisting}
 %TODO: cercare di aggiungere un esempio di come funziona questo calcolo
-\ \\
-Infine un breve sguardo alla funzione che si occupa di salvare i dati del grafo colorato su file per poterli poi processare da python e mostrare una versione interattiva del grafo a video. Viene scandita tutta la lista prodotta dalla funzione \autoref{colora} (lista di coppie \lstinline[style=cmd]|nodo, colore|) e per ogni elemento viene scritto  su file: 
+
+Infine un breve sguardo alla funzione che si occupa di salvare i dati del grafo colorato su file per poterli poi processare da python e mostrare una versione interattiva del grafo a video. Viene scandita tutta la lista prodotta dalla funzione \autoref{colora} (lista di coppie \lstinline[style=cmd]|(nodo, colore)|) e per ogni elemento viene scritto  su file: 
 
 \begin{center}
 	\lstinline[style=cmd]|nodo,vicini,colore|
 \end{center}
-\ \\
+
 Un esempio: \lstinline[style=cmd]|0,1 2 9 3,1|. Questo vuol dire che il nodo \lstinline[style=cmd]|0| ha come vicini \lstinline[style=cmd]|1, 2, 9, 3| e come colore \lstinline[style=cmd]|1|. Nelle righe \lstinline[style=cmd]|4 - 10| viene definita una funzione ausiliaria che permette di salvare la lista dei nodi adiacenti e la parte di codice che effettua le operazioni descritte prima è nelle righe \lstinline[style=cmd]|12 - 21|.
 
-\begin{lstlisting}[style=camlt, caption={Funzione che salva un grafo su file.}]
+\begin{lstlisting}[style=caml, caption={Funzione che salva un grafo su file.}]
 let grafodati_file = "grafo.data";; (*file dove salvare il grafo*)
 let salva_grafo_colorato (Successori succ) colorati = 
 	let oc = open_out grafodati_file in	(*apertura file in scrittura*)
@@ -352,8 +352,8 @@ let salva_grafo_colorato (Successori succ) colorati =
 \subsection{Main}
 
 In questo file è presenta la funzione principale \lstinline[style=cmd]|main| che si occupa di gestire tutto il flusso del programma: stampa il menu iniziale, fa scegliere all'utente su quale grafo testare l'algoritmo di colorazione, avvia la colorazione del grafo selezionato, stampa il risultato ed avvia lo script python.
-
-\begin{lstlisting}[style=camlt, caption={Parte del codice contenuto in main.ml }]
+\newpage
+\begin{lstlisting}[style=caml, caption={Parte del codice contenuto in main.ml }]
 let main () = 
 	stampa_logo ();                 (*stampa il logo*)
 	stampa_grafi_disponibili ();    (*stampa i grafi disponibili*)
@@ -385,14 +385,14 @@ let main () =
 
 \end{lstlisting}
 \ \\
-Alla riga \lstinline[style=cmd]|2 - 3| viene stampato sul terminale il logo iniziale e tutti i grafi disponibili per testare l'algoritmo. Nelle successive righe( \lstinline[style=cmd]|5 - 27|) vengono definite alcune funzioni ausiliarie per mettere in pratica i comportamenti descritti prima:
+Alla riga \lstinline[style=cmd]|2 - 3| viene stampato sul terminale il logo iniziale e tutti i grafi disponibili per testare l'algoritmo. Nelle successive righe (\lstinline[style=cmd]|5 - 27|) vengono definite alcune funzioni ausiliarie per mettere in pratica i comportamenti descritti prima:
 
 \begin{itemize}
-	\item \lstinline[style=cmd]|dati|: rimane fermo sulla scelta del grafo fin quando l'utente non seleziona un ID esistente. %TODO: scrivere meglio
-	\item \lstinline[style=cmd]|avvia_colorazione|: stampa alcune informazioni utili all'utente per poi colorare il grafo, salvarlo su file e avviare lo script python
+	\item \lstinline[style=cmd]|dati|: rimane fermo sulla scelta del grafo fin quando l'utente non seleziona un ID esistente. Una volta selezionato un ID valido conterrà il grafo scelto. %TODO: scrivere meglio
+	\item \lstinline[style=cmd]|avvia_colorazione|: stampa alcune informazioni utili all'utente per poi colorare il grafo, salvarlo su file e avviare lo script python. Qui vengono anche gestite le possibili eccezioni.
 \end{itemize}
 \ \\
-Nelle prime righe del file vengono inclusi gli altri file descritti prima con:
+Nelle prime righe del file vengono inclusi gli altri codici descritti prima con:
 
 \begin{lstlisting}[style=caml, caption={Inclusione degli altri file .ml}]
  open Printer;;
@@ -401,7 +401,8 @@ Nelle prime righe del file vengono inclusi gli altri file descritti prima con:
 \end{lstlisting}
 \subsection{Python}
 
-All'interno del progetto è anche presente un breve script in python che verrà avviato una volta riuscito a colorare il grafo. Questo script legge il file \lstinline[style=cmd]|.data| (contiene il grafo ed i colori di ogni nodo) generato da OCaml e lo rappresenta all'interno di una finestra in modo interattivo e soprattutto più comprensibile rispetto alla visualizzazione su terminale.
+All'interno del progetto è anche presente un breve script in python che verrà avviato una volta riuscito a colorare il grafo. Questo script legge il file \lstinline[style=cmd]|.data| (contiene il grafo ed i colori di ogni nodo) generato da OCaml e lo rappresenta all'interno di una finestra in modo interattivo e soprattutto più comprensibile rispetto alla visualizzazione su terminale.\\
+
 \begin{lstlisting}[style=python, caption={Alcune funzioni dello script python}]
 from pyvis.network import Network
 
@@ -415,11 +416,11 @@ def main(fname):
 	with open(fname, 'r') as f:
 		for text in f.readlines():
 		text = text.strip("\n")               # elimina i vari \n nel file
-		if text != '':                        # controlla che la riga sia valida
-			nodo, vicini, colore  = text.split(",")  # prende nodo, vicini e colore
+		if text != '':                        # controlla validita' riga
+			nodo, vicini, colore  = text.split(",")
 
-			vicini = vicini.split(" ")  				 	 	 # prende i vicini
-			colori.append(int(colore))               # aggiunge il colore alla lista
+			vicini = vicini.split(" ")  			 # prende i vicini
+			colori.append(int(colore))         # aggiunge il colore alla lista
 
 			if vicini[0] != '':                # controlla se il nodo ha vicini
 				for vicino in vicini:            # crea gli archi del grafo
@@ -447,9 +448,10 @@ def main(fname):
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=.7\textwidth]{img/grafocoloratopy.png}
+	\includegraphics[width=.6\textwidth]{img/grafocoloratopy.png}
 	\caption{Output dello script python.}
 \end{figure}
+
 \subsection{Makefile}
 
 File utilizzato per la compilazione del progetto che avviene tramite il comando \lstinline[style=cmd]|make|. 
@@ -459,25 +461,21 @@ Qualora un file venga modificato, questo permette di non dover ricompilare tutto
 	\item \lstinline[style=cmd]|.cmi|: interfacce compilate utili per il corretto funzionamento dell'estensione \textit{OCaml} in \textit{Visual Studio Code} e per la corretta compilazione degli altri file.
 	\item \lstinline[style=cmd]|.cmo|: file oggetto che verranno poi spostati nella cartella \lstinline[style=cmd]|build| per essere utilizzati nella fase di \textit{linking}
 \end{itemize}
-\ \\
+
 Quindi, ogni file \lstinline[style=cmd]|.cmo| dipende dai relativi file \lstinline[style=cmd]|.ml| e \lstinline[style=cmd]|.mli|.
-Successivamente, avvia la fase di \textit{linking} unendo insieme tutti i file \lstinline[style=cmd]|.cmo| e generando l'eseguibile \lstinline[style=cmd]|exe| nella cartella \lstinline[style=cmd]|bin|. All'interno di quest'ultima copia anche lo script python per permettere il corretto funzionamento del progetto.
+Successivamente, avvia la fase di \textit{linking} unendo insieme tutti i file \lstinline[style=cmd]|.cmo| e generando l'eseguibile \lstinline[style=cmd]|exe| nella cartella \lstinline[style=cmd]|bin|. All'interno di quest'ultima copia anche lo script python per permettere il corretto funzionamento del progetto.\\
 
 \begin{lstlisting}[style=make, caption={Breve estratto del file Makefile}]
 cc = ocamlc
 cflags = -c
 cinclude = -I src
-
 srcdir = src
 buildir = build
 bindir = bin
-
 target = $(bindir)/exe
 
 .PHONY: clear
-
 all: cartelle $(target)
-
 
 $(target): 
 	$(buildir)/graphUtils.cmo $(buildir)/printer.cmo 
@@ -513,16 +511,16 @@ Verranno create due nuove cartelle:
 	\includegraphics[width=\textwidth]{img/make.png}
 	\caption{Output del comando make}
 \end{figure}
-\ \\
+
 Qualora si voglia ripulire tutti i file generati da questa operazione è possibile tramite il comando:
 
 \begin{center}
 	\lstinline[style=cmd]|make clear|
 \end{center}
-
+\ \\
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\textwidth]{img/makeclear.png}
+	\includegraphics[width=.8\textwidth]{img/makeclear.png}
 	\caption{Output del comando make clear}
 \end{figure}
 
@@ -534,20 +532,20 @@ Per avviare l'eseguibile del progetto generato alla fase precedente è prima nec
 	\lstinline[style=cmd]|cd bin|\\
 	\lstinline[style=cmd]|./exe  |
 \end{center}
-\ \\
-Verrà inizialmente mostrato il menù iniziale e l'utente dovrà scegliere quale grafo utilizzare per testare l'algoritmo di colorazione.
+
+Verrà mostrato il menù iniziale e l'utente dovrà scegliere quale grafo utilizzare per testare l'algoritmo di colorazione.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\textwidth]{img/menu.png}
+	\includegraphics[width=.8\textwidth]{img/menu.png}
 	\caption{Menu iniziale}
 \end{figure}
-\ \\
+
 Se viene inserito un ID invalido, si rimane bloccati in questa scelta fin quando un ID esistente non viene inserito.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\textwidth]{img/badid.png}
+	\includegraphics[width=.8\textwidth]{img/badid.png}
 	\caption{Esempio di multipli ID errati}
 \end{figure}
 \ \\
@@ -555,22 +553,22 @@ Una volta selezionato un ID valido verrà stampato a video il grafo, con il nodo
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\textwidth]{img/grafo1bin.png}
+	\includegraphics[width=.8\textwidth]{img/grafo1bin.png}
 	\caption{Esempio di colorazione di un grafo}
 \end{figure}
-\ \\
+
 Infine verrà avviato lo script python che aprirà una finestra con al suo interno il grafo disegnato.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\textwidth]{img/termgrafo.png}
+	\includegraphics[width=.7\textwidth]{img/termgrafo.png}
 	\caption{Finestra aperta da python con terminale affiancato}
 \end{figure}
-\ \\
+
 Qualora l'utente selezionerà un grafo che non è colorabile per via del numero insufficiente di colori, verrà mostrato a video un messaggio di errore e non verrà avviato lo script python.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\textwidth]{img/errore.png}
+	\includegraphics[width=.7\textwidth]{img/errore.png}
 	\caption{Messaggio di errore per numero di colori insufficienti}
 \end{figure}

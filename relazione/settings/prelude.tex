@@ -6,7 +6,7 @@
 \usepackage{float}
 \usepackage{caption}
 \usepackage{subcaption}
-
+\usepackage[parfill]{parskip}
 %% links
 \usepackage{hyperref}
 \hypersetup{
@@ -50,7 +50,7 @@
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
-\lstdefinestyle{caml}{
+\lstdefinestyle{aaa}{
 	backgroundcolor=\color{backcolour},   
 	commentstyle=\color{codegreen},
 	keywordstyle=\color{magenta},
@@ -75,7 +75,7 @@
 	literate={'"'}{\textquotesingle "\textquotesingle}3
 }
 
-\lstdefinestyle{camlt}{
+\lstdefinestyle{caml}{
 	backgroundcolor=\color{backcolour},   
 	commentstyle=\color{codegreen},
 	keywordstyle=\color{magenta},
@@ -115,7 +115,7 @@
 	tabsize=2,
 	language=[gnu] make,
 	columns=[c]fixed,
-	basicstyle=\footnotesize,
+	basicstyle=\scriptsize,
 	upquote=true,
 	breaklines=true,
 	showstringspaces=false,
@@ -129,7 +129,7 @@
 	keywordstyle=\color{magenta},
 	numberstyle=\tiny\color{codegray},
 	stringstyle=\color{codepurple},
-	basicstyle=\footnotesize,
+	basicstyle=\footnotesize\ttfamily,
 	breakatwhitespace=false,         
 	breaklines=true,                 
 	captionpos=b,                    
