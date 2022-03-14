@@ -116,8 +116,8 @@ Il tipo \lstinline[style=cmd]|grafo| e \lstinline[style=cmd]|succesori|  sono de
 \end{lstlisting}
 \newpage
 \subsection{Data}
-In questo file ci sono tutte le definizioni dei grafi utilizzati come test per verificare il corretto funzionamento dell'algoritmo di colorazione, una funzione che permette di stampare un menù per la selezione di un grafo (con la descrizione del grafo e un ID unico) da parte dell'utente ed una funzione che dato un numero, ritorna uno dei grafi detti prima.
-\`{E} anche presente una lista \lstinline[style=cmd]|grafi| che contiene tutti i grafi disponibili con una descrizione (una coppia \lstinline[style=cmd]|(grafo, string)|), è questa che permette di aggiungere e togliere grafi in maniera semplice e senza dover modificare alcuna funzione.
+In questo file ci sono tutte le definizioni dei grafi utilizzati come test per verificare il corretto funzionamento dell'algoritmo di colorazione; una funzione che permette di stampare un menù, con alcune informazioni come la descrizione dei grafi e gli ID unici, ed una funzione che dato un numero (ID), ritorna uno dei grafi detti prima.
+\`{E} anche presente una lista (\lstinline[style=cmd]|grafi|) che contiene tutti i grafi disponibili con una descrizione (una coppia \lstinline[style=cmd]|(grafo, string)|), è questa che permette di aggiungere e togliere elementi in maniera semplice e senza dover modificare alcuna funzione.\\
 
 \begin{lstlisting}[style=caml, caption={Lista di coppie (grafo,string) utilizzata per assiocare ad un grafo una descrizione.}]
 let grafi = [
@@ -128,7 +128,7 @@ let grafi = [
 	(grafo_4,   "Grafo 4")
 ];;
 \end{lstlisting}
-\ \\
+
 La funzione \lstinline[style=cmd]|stampa_grafi_disponibili| mostra a video la descrizione dei vari grafi anteceduta da un ID. Questa scandisce la lista \lstinline[style=cmd]|grafi| ricorsivamente e va a stampare il secondo elemento di ogni coppia.
 
 \begin{figure}[H]
@@ -160,7 +160,6 @@ let stampa_grafi_disponibili () =
 	\end{subfigure}
 \end{figure}
 
-\ \\
 Infine, la funzione \lstinline[style=cmd]|scegli_grafo| che, dato un ID, ritorna il relativo grafo. \`{E} interessante notare come per selezionare un dato grafo non viene scorsa ricorsivamente tutta la lista, ma quest'utlima viene convertita in un \lstinline[style=cmd]|Array| per poter utilizzare il metodo \lstinline[style=cmd]|get| per accedere all'i-esima posizione. Vengono effettuati alcuni controlli sull'input: viene controllato se l'ID passato è valido (non superi per eccesso, o per difetto gli ID mostrati a video) e nel caso solleva un'eccezione (verrà utilizzata nella funzione \lstinline[style=cmd]|main| per segnalare il problema). %TODO: aggiungere riferimento
 
 \begin{lstlisting}[style=caml, caption={Funzione che ritorna il grafo selezionato}]
