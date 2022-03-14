@@ -351,7 +351,7 @@ let salva_grafo_colorato (Successori succ) colorati =
 
 \subsection{Main}
 
-In questo file è presenta la funzione principale \lstinline[style=cmd]|main| che si occupa di gestire tutto il flusso del programma: stampa il menu iniziale, fa scegliere all'utente su quale grafo testare l'algoritmo di colorazione, avvia la colorazione del grafo selezionato, stampa il risultato ed avvia lo script python.
+In questo file è presente la funzione principale \lstinline[style=cmd]|main| che si occupa di gestire tutto il flusso del programma: stampa il menu iniziale, fa scegliere all'utente su quale grafo testare l'algoritmo di colorazione, avvia la colorazione del grafo selezionato, stampa il risultato ed avvia lo script python.
 \newpage
 \begin{lstlisting}[style=caml, caption={Parte del codice contenuto in main.ml }]
 let main () = 
@@ -401,7 +401,7 @@ Nelle prime righe del file vengono inclusi gli altri codici descritti prima con:
 \end{lstlisting}
 \subsection{Python}
 
-All'interno del progetto è anche presente un breve script in python che verrà avviato una volta riuscito a colorare il grafo. Questo script legge il file \lstinline[style=cmd]|.data| (contiene il grafo ed i colori di ogni nodo) generato da OCaml e lo rappresenta all'interno di una finestra in modo interattivo e soprattutto più comprensibile rispetto alla visualizzazione su terminale.\\
+All'interno del progetto è anche presente un breve script in python che verrà avviato una volta riuscito a colorare il grafo. Questo script legge il file \lstinline[style=cmd]|.data| generato da OCaml (contiene il grafo ed i colori di ogni nodo) e lo rappresenta all’interno di una finestra in modo interattivo e soprattutto più comprensibile rispetto alla visualizzazione su terminale.\\
 
 \begin{lstlisting}[style=python, caption={Alcune funzioni dello script python}]
 from pyvis.network import Network
