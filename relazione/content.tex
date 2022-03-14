@@ -1,5 +1,5 @@
 \section{Obiettivo}
-L'obiettivo di questo progetto è quello di realizzare un programma scritto in \textbf{OCaml} che risolva il \textit{problema} della \textit{colorazione di un grafo}: riuscire a colorare, se possibile, ogni nodo del grafo in modo da non avere mai nodi adiacenti con lo stesso colore. In via più formale, dato un grafo \lstinline[style=cmd]|g| ed un numero massimo di colori utilizzabili \lstinline[style=cmd]|N|, assegnare un colore ( da $0$ a $N-1$) ai nodi in modo tale che non esistano nodi adiacenti con lo stesso colore; qualora il numero di colori \lstinline[style=cmd]|N| non sia sufficiente per realizzare la colorazione, riportare un errore.
+L'obiettivo di questo progetto è quello di realizzare un programma scritto in \textbf{OCaml} che risolva il \textit{problema} della \textit{colorazione di un grafo}: riuscire a colorare, se possibile, ogni nodo del grafo in modo da non avere mai nodi adiacenti con lo stesso colore. In via più formale, dato un grafo \lstinline[style=cmd]|g| ed un numero massimo di colori utilizzabili \lstinline[style=cmd]|N|, assegnare un colore (da $0$ a $N-1$) ai nodi in modo tale che non esistano nodi adiacenti con lo stesso colore; qualora il numero di colori \lstinline[style=cmd]|N| non sia sufficiente per realizzare la colorazione, riportare un errore.
  
 \section{Struttura del Progetto}
 
@@ -74,7 +74,7 @@ I file \lstinline[style=cmd]|.cmi| vengono lasciati all'interno della cartella \
 In questo progetto i grafi (si parla sempre di grafi \textit{orientati/diretti}) vengono rappresentati come una \textit{tupla} di 3 elementi:
 
 \begin{enumerate}
-	\item \textbf{\lstinline[style=cmd]|succ|}: funzione successori che definisce tutti i successori (nodi vicini) di tutti i nodi del grafo
+	\item \textbf{\lstinline[style=cmd]|succ|} (funzione successori): definisce tutti i successori (nodi vicini) di tutti i nodi del grafo
 	\item \textbf{\lstinline[style=cmd]|start|}: nodo di partenza per la colorazione
 	\item \textbf{\lstinline[style=cmd]|maxColors|}: numero massimo di colori da utilizzare durante la colorazione
 \end{enumerate}
@@ -117,7 +117,7 @@ Il tipo \lstinline[style=cmd]|grafo| e \lstinline[style=cmd]|succesori|  sono de
 \newpage
 \subsection{Data}
 In questo file ci sono tutte le definizioni dei grafi utilizzati come test per verificare il corretto funzionamento dell'algoritmo di colorazione; una funzione che permette di stampare un menù, con alcune informazioni come la descrizione dei grafi e gli ID unici, ed una funzione che dato un numero (ID), ritorna uno dei grafi detti prima.
-\`{E} anche presente una lista (\lstinline[style=cmd]|grafi|) che contiene tutti i grafi disponibili con una descrizione (una coppia \lstinline[style=cmd]|(grafo, string)|), è questa che permette di aggiungere e togliere elementi in maniera semplice e senza dover modificare alcuna funzione.\\
+\`{E} anche presente una lista (\lstinline[style=cmd]|grafi|) che contiene tutti i grafi disponibili con una descrizione (una coppia \lstinline[style=cmd]|(grafo, string)|). \`{E} questa che permette di aggiungere e togliere elementi in maniera semplice e senza dover modificare alcuna funzione.\\
 
 \begin{lstlisting}[style=caml, caption={Lista di coppie (grafo,string) utilizzata per assiocare ad un grafo una descrizione.}]
 let grafi = [
@@ -160,7 +160,7 @@ let stampa_grafi_disponibili () =
 	\end{subfigure}
 \end{figure}
 
-Infine, la funzione \lstinline[style=cmd]|scegli_grafo| che, dato un ID, ritorna il relativo grafo. \`{E} interessante notare come per selezionare un dato grafo non viene scorsa ricorsivamente tutta la lista, ma quest'utlima viene convertita in un \lstinline[style=cmd]|Array| per poter utilizzare il metodo \lstinline[style=cmd]|get| per accedere all'i-esima posizione. Vengono effettuati alcuni controlli sull'input: viene controllato se l'ID passato è valido (non superi per eccesso, o per difetto gli ID mostrati a video) e nel caso solleva un'eccezione (verrà utilizzata nella funzione \lstinline[style=cmd]|main| per segnalare il problema). %TODO: aggiungere riferimento
+Infine, la funzione \lstinline[style=cmd]|scegli_grafo| che, dato un ID, ritorna il relativo grafo. \`{E} interessante notare come per selezionare un dato grafo non viene scorsa ricorsivamente tutta la lista, ma quest'utlima viene convertita in un \lstinline[style=cmd]|Array| per poter utilizzare il metodo \lstinline[style=cmd]|get| per accedere all'i-esima posizione. Vengono effettuati alcuni controlli sull'input: viene controllato se l'ID passato è valido (non superi per eccesso, o per difetto gli ID mostrati a video) e nel caso solleva un'eccezione (verrà utilizzata nella funzione \lstinline[style=cmd]|main| per segnalare il problema).\\
 
 \begin{lstlisting}[style=caml, caption={Funzione che ritorna il grafo selezionato}]
 let scegli_grafo id_grafo =
@@ -244,7 +244,7 @@ All'interno di questo file sono contenute tutte le funzioni e le espressioni che
 			\item se possibile colora il nodo (aggiunge la coppia \lstinline[style=cmd]|(nodo, colore)| alla lista \lstinline[style=cmd]|colorati|), in caso contrario verrà sollevata un'eccezione, 
 			\item infine aggiunge alla frontiera i nodi vicini al nodo esaminato. 
 		\end{itemize}
-	Richiama quindi se stessa con le nuove liste continuando così la ricorsione (righe \lstinline[style=cmd]|11 - 18|)
+	Richiama quindi se stessa con le nuove liste continuando così la ricorsione (righe \lstinline[style=cmd]|11-18|)
 \end{itemize}
 \ \\
 Questa esplorazione avrà fine quando la frontiera non conterrà più nodi da esplorare.
@@ -274,7 +274,7 @@ let colora (Grafo ((Successori succ), partenza, maxColori)) =
 ;;
 \end{lstlisting}
 \ \\
-Un'altra funzione molto importante all'interno di questo file è \lstinline[style=cmd]|scegli_colore|, che dati in input la \textit{funzione successori}, il \textit{nodo} da colorare, la lista dei \textit{nodi colorati} e il \textit{numero massimo di colori}, restituisce un colore (\lstinline[style=cmd]|int|) se possibile, altrimenti lancia un'eccezione (il numero di colori scelto è insufficiente per colorare il grafo). Alla riga \lstinline[style=cmd]|2, 7| viene scelto un potenziale risultato che è dato dal massimo tra i colori vicini al nodo aumentato di 1, in modulo \lstinline[style=cmd]|maxColori|. Così facendo ottengo una scelta ciclica dei colori, potendo ritornare a scegliere il colore 0 quando tutti gli altri sono stati assegnati.
+Un'altra funzione molto importante all'interno di questo file è \lstinline[style=cmd]|scegli_colore|, che dati in input la \textit{funzione successori}, il \textit{nodo} da colorare, la lista dei \textit{nodi colorati} e il \textit{numero massimo di colori}, restituisce un colore (\lstinline[style=cmd]|int|) se possibile, altrimenti lancia un'eccezione (il numero di colori scelto è insufficiente per colorare il grafo). Alla riga \lstinline[style=cmd]|2, 7| viene scelto un potenziale risultato che è dato dal massimo tra i colori vicini al nodo aumentato di 1, in modulo \lstinline[style=cmd]|maxColori|. Così facendo ottengo una scelta ciclica dei colori, potendo ritornare a scegliere il colore \lstinline[style=cmd]|0| quando tutti gli altri sono stati assegnati.
 
 \[
 	risultato\_mod = (\max(colori\_vicini) + 1) \bmod maxColori
@@ -392,7 +392,7 @@ Alla riga \lstinline[style=cmd]|2 - 3| viene stampato sul terminale il logo iniz
 	\item \lstinline[style=cmd]|avvia_colorazione|: stampa alcune informazioni utili all'utente per poi colorare il grafo, salvarlo su file e avviare lo script python. Qui vengono anche gestite le possibili eccezioni.
 \end{itemize}
 \ \\
-Nelle prime righe del file vengono inclusi gli altri codici descritti prima con:
+Nelle prime righe del file vengono inclusi gli altri codici descritti nelle precedenti sezioni con:
 
 \begin{lstlisting}[style=caml, caption={Inclusione degli altri file .ml}]
  open Printer;;
@@ -530,43 +530,41 @@ Per avviare l'eseguibile del progetto generato alla fase precedente è prima nec
 	\lstinline[style=cmd]|./exe  |
 \end{center}
 
-Verrà mostrato il menù iniziale e l'utente dovrà scegliere quale grafo utilizzare per testare l'algoritmo di colorazione.
+Verrà mostrato il menù iniziale e l'utente dovrà scegliere quale grafo utilizzare per testare l'algoritmo di colorazione. Se verrà inserito un ID invalido si rimane bloccati in questa scelta fin quando un ID corretto
+non verrà inserito. Una volta selezionato un ID valido verrà stampato a video il \textit{grafo}, con il \textit{nodo di partenza}, il \textit{massimo numero di colori} ed il \textit{risultato} della fase di colorazione.
+Infine verrà avviato lo script python che aprirà una finestra con al suo interno il grafo disegnato. Qualora l'utente selezionerà un grafo che non è colorabile per via del numero insufficiente di colori, verrà mostrato a video un messaggio di errore e non verrà avviato lo script python.
+
+
+
+
+
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=.8\textwidth]{img/menu.png}
+	\includegraphics[width=.80\textwidth]{img/menu.png}
 	\caption{Menu iniziale}
 \end{figure}
-
-Se viene inserito un ID invalido si rimane bloccati in questa scelta fin quando un ID corretto
-non verrà inserito.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=.8\textwidth]{img/badid.png}
 	\caption{Esempio di multipli ID errati}
 \end{figure}
-\ \\
-Una volta selezionato un ID valido verrà stampato a video il \textit{grafo}, con il \textit{nodo di partenza}, il \textit{massimo numero di colori} ed il \textit{risultato} della fase di colorazione.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=.8\textwidth]{img/grafo1bin.png}
+	\includegraphics[width=\textwidth]{img/grafo1bin.png}
 	\caption{Esempio di colorazione di un grafo}
 \end{figure}
 
-Infine verrà avviato lo script python che aprirà una finestra con al suo interno il grafo disegnato.
-
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=.7\textwidth]{img/termgrafo.png}
+	\includegraphics[width=\textwidth]{img/termgrafo.png}
 	\caption{Finestra aperta da python con terminale affiancato}
 \end{figure}
 
-Qualora l'utente selezionerà un grafo che non è colorabile per via del numero insufficiente di colori, verrà mostrato a video un messaggio di errore e non verrà avviato lo script python.
-
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=.7\textwidth]{img/errore.png}
+	\includegraphics[width=\textwidth]{img/errore.png}
 	\caption{Messaggio di errore per numero di colori insufficienti}
 \end{figure}
