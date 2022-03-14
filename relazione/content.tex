@@ -463,7 +463,7 @@ Qualora un file venga modificato, questo permette di non dover ricompilare tutto
 \end{itemize}
 
 Quindi, ogni file \lstinline[style=cmd]|.cmo| dipende dai relativi file \lstinline[style=cmd]|.ml| e \lstinline[style=cmd]|.mli|.
-Successivamente, avvia la fase di \textit{linking} unendo insieme tutti i file \lstinline[style=cmd]|.cmo| e generando l'eseguibile \lstinline[style=cmd]|exe| nella cartella \lstinline[style=cmd]|bin|. All'interno di quest'ultima copia anche lo script python per permettere il corretto funzionamento del progetto.\\
+Successivamente, avvia la fase di \textit{linking} unendo insieme tutti i file \lstinline[style=cmd]|.cmo| e generando l'eseguibile \lstinline[style=cmd]|exe| nella cartella \lstinline[style=cmd]|bin|. All’interno di quest’ultima viene copiato anche lo script python per permettere il corretto funzionamento del progetto.\\
 
 \begin{lstlisting}[style=make, caption={Breve estratto del file Makefile}]
 cc = ocamlc
