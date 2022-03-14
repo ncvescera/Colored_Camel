@@ -176,10 +176,10 @@ let scegli_grafo id_grafo =
 
 \subsection{Printer}
 
-%TODO: rileggere meglio, la parola "carattere" è ripetuta più volte
-In questo file risiedono tutte le funzioni e dichiarazioni che gestiscono la stampa a video. Vi è una definizione di caratteri per stampare su terminale (deve ovviamente supportare le emoji e i vari colori) caratteri colorati (rosso, verde, blu, ecc.), elementi in grassetto ed emoji. La funzione più degna di nota è \lstinline[style=cmd]|stampa_grafo| che, dato un grafo, stampa a schermo tutti i nodi con i suoi vicini (in pratica rappresenta la funzione successori).\\
+In questo file risiedono tutte le funzioni e dichiarazioni che gestiscono la stampa a video. Vi è una definizione di stringhe per stampare su terminale caratteri colorati (rosso, verde, blu, ecc.),
+elementi in grassetto ed emoji (a patto che quest'ultimo li supporti). La funzione più degna di nota è \lstinline[style=cmd]|stampa_grafo| che, dato un grafo, stampa a schermo tutti i nodi con i suoi vicini (in pratica rappresenta la funzione successori).\\
 \ \\
-Di seguito alcuni dei codici utilizzati per rappresentare i colori nel terminale: 
+Di seguito alcuni dei codici utilizzati per rappresentare i colori nel terminale: \\
 
 \begin{lstlisting}[style=caml, caption={Codici per i colori ed elementi in grassetto}]
 	type colore = Colore of string;;
