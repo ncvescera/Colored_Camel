@@ -1,6 +1,6 @@
-type successori = Successori of (int -> int list)
-type grafo = Grafo of successori * int * int
+type grafo = Grafo of (int -> int list)
+type problema = Problema of grafo * int * int
 exception InsufficentColorNumber
 
-val colora : grafo -> (int * int) list
-val salva_grafo_colorato: successori -> (int * int) list -> unit
+val colora : problema -> (int * int) list
+val salva_grafo_colorato: grafo -> (int * int) list -> unit

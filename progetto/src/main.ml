@@ -43,12 +43,12 @@ let main () =
             with BadChoice -> 
                 aux () 
                 in aux() 
-                    in let avvia_colorazione (Grafo (g, partenza, maxColori)) =                                     (*fa partire la funzione che colora il grafo*)
-                        print_string "\nIl Grafo selezionato: \n\n"; stampa_grafo (Grafo (g, partenza, maxColori)); (*  stampa il grafo nel terminale*)
+                    in let avvia_colorazione (Problema (g, partenza, maxColori)) =                                     (*fa partire la funzione che colora il grafo*)
+                        print_string "\nIl Grafo selezionato: \n\n"; stampa_grafo (Problema (g, partenza, maxColori)); (*  stampa il grafo nel terminale*)
                         
                         print_string "Coloro ...\n\n";
                         
-                        let colorati = colora (Grafo (g, partenza, maxColori)) in       (*colora il grfo*)
+                        let colorati = colora (Problema (g, partenza, maxColori)) in       (*colora il grfo*)
                             stampa_nodi_colorati colorati;                              (* stampa il grafo colorato*)
                             salva_grafo_colorato g colorati;                            (* salva il grafo colorato per python*)
                             avvia_python ()                                             (* avvia python per mostrare a schermo il grafo*)

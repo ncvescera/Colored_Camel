@@ -20,9 +20,9 @@ let grafo_1 =
       | _ -> [] in
   let start = 3 in            (* Partenza *)
   let maxColors = 3 in        (* Massimo numero di colori*)
-  let succ = Successori x in  (* Successori *)
+  let succ = Grafo x in  (* Successori *)
 
-  (Grafo (succ, start, maxColors))
+  (Problema (succ, start, maxColors))
 ;;
 
 
@@ -41,9 +41,9 @@ let grafo_2_err =
 
     let start = 0 in            (* Partenza *)
     let maxColors = 3 in        (* Massimo numero di colori*)
-    let succ = Successori x in  (* Successori *)
+    let succ = Grafo x in  (* Successori *)
     
-    (Grafo (succ, start, maxColors))
+    (Problema (succ, start, maxColors))
 ;;
 
 
@@ -62,9 +62,9 @@ let grafo_2 =
 
     let start = 0 in            (* Partenza *)
     let maxColors = 4 in        (* Massimo numero di colori*)
-    let succ = Successori x in  (* Successori *)
+    let succ = Grafo x in  (* Successori *)
     
-    (Grafo (succ, start, maxColors))
+    (Problema (succ, start, maxColors))
 ;;
 
 
@@ -83,9 +83,9 @@ let grafo_3 =
     
     let start = 0 in            (* Partenza *)
     let maxColori = 3 in        (* Massimo numero di colori*)
-    let succ = Successori x in  (* Successori *)
+    let succ = Grafo x in  (* Successori *)
 
-    (Grafo (succ, start, maxColori))
+    (Problema (succ, start, maxColori))
 ;;
 
 
@@ -99,9 +99,9 @@ let grafo_4 =
     
     let start = 0 in            (* Partenza *)
     let maxColori = 3 in        (* Massimo numero di colori*)
-    let succ = Successori x in  (* Successori *)
+    let succ = Grafo x in  (* Successori *)
 
-    (Grafo (succ, start, maxColori))
+    (Problema (succ, start, maxColori))
 ;;
 
 
@@ -123,9 +123,9 @@ let grafo_5 =
     
     let start = 0 in            (* Partenza *)
     let maxColori = 2 in        (* Massimo numero di colori*)
-    let succ = Successori x in  (* Successori *)
+    let succ = Grafo x in  (* Successori *)
 
-    (Grafo (succ, start, maxColori))
+    (Problema (succ, start, maxColori))
 ;;
 
 
