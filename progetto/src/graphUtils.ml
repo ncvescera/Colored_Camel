@@ -1,5 +1,5 @@
-type successori = Successori of (int -> int list);;
-type grafo = Grafo of successori * int * int;;
+type grafo = Grafo of (int -> int list);;
+type problema = Problema of grafo * int * int;;
 exception InsufficentColorNumber;;
 
 
@@ -104,7 +104,7 @@ let rec tutti_colori_vicini vicini colorati =
       nodo:     Nodo da analizzare
       colorati: Lista di nodi colorati
 *)
-let max_colore_vicini (Successori succ) nodo colorati =
+let max_colore_vicini (Grafo succ) nodo colorati =
   let vicini = (succ nodo) in                                     (*prende i vicini del nodo*)            
     let colori_vicini = tutti_colori_vicini vicini colorati in    (*  prende tutti i colori dei vicini*)
       max_lista colori_vicini                            (*calcola il massimo tra tutti i colori presi*)
@@ -197,8 +197,8 @@ let calcola_refValue maxColori =
     colorati:  Lista di nodi colorati
     maxColori: Massimo numero di colori
 *)
-let scegli_colore (Successori succ) nodo colorati maxColori = 
-  let risultato = ((max_colore_vicini (Successori succ) nodo colorati) + 1) in (*trova il massimo tra i colori dei vicini del nodo*)
+let scegli_colore (Grafo succ) nodo colorati maxColori = 
+  let risultato = ((max_colore_vicini (Grafo succ) nodo colorati) + 1) in (*trova il massimo tra i colori dei vicini del nodo*)
     let colori_vicini = tutti_colori_vicini (succ nodo) colorati in            (*trova tutti i colri vicini*)
       let risultato_mod = risultato mod maxColori in                        (*calcola il modulo così da avere il risultato pronto*)
         if List.mem risultato_mod colori_vicini                             (*il colore scelto è lo stesso di un colore vicino*)
@@ -223,7 +223,7 @@ let scegli_colore (Successori succ) nodo colorati maxColori =
     partenza:  Nodo di partenza
     maxColori: Massimo numero di colori da utilizzare
 *)
-let colora (Grafo ((Successori succ), partenza, maxColori)) =
+let colora (Problema ((Grafo succ), partenza, maxColori)) =
   refValue := calcola_refValue maxColori;       (*valore per trovare il colore mancante*)
   let rec esplora visitati colorati = 
     function (*frontiera*)
@@ -236,7 +236,7 @@ let colora (Grafo ((Successori succ), partenza, maxColori)) =
           (*continua con la ricorsione espandendo i nodi vicini al nodo*)
           esplora 
                 (visitati@[nodo])                                                              (*aggiunge il nodo attuale ai visitati*)
-                (colorati@[(nodo, (scegli_colore (Successori succ) nodo colorati maxColori))]) (*colora il nodo [aggiunge la coppia (nodo,colore) a colorati]*)
+                (colorati@[(nodo, (scegli_colore (Grafo succ) nodo colorati maxColori))]) (*colora il nodo [aggiunge la coppia (nodo,colore) a colorati]*)
                 (coda@(succ nodo))                                                             (*espande i vicini del nodo attuale e li aggiunge alla frontiera*)
       
   in esplora [] [] [partenza]   (*avvia la ricerca e la colorazione, visitati=[], colorati=[], frontiera=[partenza]*)
@@ -261,7 +261,7 @@ let colora (Grafo ((Successori succ), partenza, maxColori)) =
     colorati: Lista di coppie nodo - colore
 *)
 let grafodati_file = "grafo.data";; (*Nome del file su cui vengono salvati i dati del grafo*)
-let salva_grafo_colorato (Successori succ) colorati = 
+let salva_grafo_colorato (Grafo succ) colorati = 
   let oc = open_out grafodati_file in           (*Apertura del file in scrittura*)
     let rec salva_lista =                       (*Funzione ausiliaria per salvare su file una lista data*)
       function (* lista *)

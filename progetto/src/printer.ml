@@ -102,7 +102,7 @@ let rec stampa_lista = function (* lista *)
     succ:     Funzione successori
     partenza: Nodo di partenza
 *)
-let stampa_grafo (GraphUtils.Grafo((GraphUtils.Successori succ), partenza, maxColori)) =
+let stampa_grafo (GraphUtils.Problema((GraphUtils.Grafo succ), partenza, maxColori)) =
   print_colore rosso_b "Partenza: ";
   print_int partenza; print_colore rosso_b " Max Colori: "; print_int maxColori;
   print_string "\n\n";
