@@ -179,8 +179,25 @@ let calcola_refValue maxColori =
   in aux 0 maxColori                   (*avvia la ricorsione con risultato=0 e colore=maxColori*)
 ;;               
 
+(*Calcola la lista con tutti i colori disponibili*)
+(*  Funzione che dato il massimo numero di colori restituisce
+    una lista con tutti i colori.
 
+    e.g.: 
+      maxColori = 3 risultato = [0; 1; 2]
 
+  input:
+    maxColori: numero di colori da utilizzare
+*)
+let calcola_lista_colori maxColori = 
+  let rec aux risultato = function (* colore *)
+      0 -> List.rev risultato               (*caso base, tutti i colori analizzati. Ritorna la lista invertita [con il giusto ordine]*)
+    | x -> 
+      aux                                   (*caso ricorsivo, somma al risultato il colore precedente all'attuale per trovare un nuovo colore*)
+        (risultato@[(x-1)])                 (* aggiunge il numero alla lista*)
+        (x-1)                               (* continua con il nuovo numero*)
+  in aux [] maxColori     (*avvia la funzione con risultato=[] e colore=maxColori*)
+;;
 
 
 
