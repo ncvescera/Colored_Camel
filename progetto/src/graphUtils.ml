@@ -214,6 +214,41 @@ let scegli_colore (Grafo succ) nodo colorati maxColori =
 
 
 
+(*Lista con tutti i colori disponibili*)
+(*  Verrà poi utilizzata per cercare di trovare un possibile colore per i nodi.
+    Verrà successivamente inizializzata con tutti i colori disponibili
+*)
+let lista_colori = ref [0;1;2];;
+
+(*Funzione per trovare un possibile colore per un nodo dato*)
+(*  La funzione controlla tutti i colori vicini del nodo e ricorsivamente
+    va a controllare se un colore è sato già assegnato.
+
+    - Se il colore in esame è stato assegnato (un nodo adiacente ha quel colore) passa al successivo
+    - Se un colore non è stato assegnato viene ritornato
+
+    Se tutti i colori disponibili sono stati assegnati, solleva un'eccezione.
+
+  input:
+    succ:     Funzione successori (il grafo)
+    nodo:     Nodo da colorare
+    colorati: Lista con tutti i nodi colorati
+*)
+let scegli_colore_bk (Grafo succ) nodo colorati = 
+  let vicini = succ nodo in                                         (*tutti i vicini del nodo*)
+    let colori_vicini = tutti_colori_vicini vicini colorati in      (*tutti i colori vicini del nodo*)
+      let rec cerca_colore_nonusato = function (* lista colori da provare*)
+        []        -> raise InsufficentColorNumber;    (*caso base, non ci sono colori disponibili*)
+        |x::coda  ->                                  (*caso ricorsivo, analizza il colore*)
+          if List.mem x colori_vicini                 (* il colore è tra i colori vicini*)
+            then
+              cerca_colore_nonusato coda              (*  continua la ricorsione ignorandolo*)
+        else                                          (* il colore non è tra i vicini*)
+          x                                           (*  trovato! Lo ritorna*)
+        in cerca_colore_nonusato !lista_colori      (*avvia la ricorsione con la lista di colori*)
+;;
+
+
 
 
 
