@@ -95,6 +95,7 @@ let rec tutti_colori_vicini vicini colorati =
 ;;
 
 
+
 (*Trova il colore massimo (il colore con valore più alto) tra i colori vicini di un nodo*)
 (* Prende i colori vicini del nodo [tutti_colori_vicini()] e 
    trova il massimo di questa lista [max_lista()]
@@ -114,14 +115,144 @@ let max_colore_vicini (Grafo succ) nodo colorati =
 
 
 
+           
+
+(*Calcola la lista con tutti i colori disponibili*)
+(*  Funzione che dato il massimo numero di colori restituisce
+    una lista con tutti i colori.
+
+    e.g.: 
+      maxColori = 3 risultato = [0; 1; 2]
+
+  input:
+    maxColori: numero di colori da utilizzare
+*)
+let calcola_lista_colori maxColori = 
+  let rec aux risultato = function (* colore *)
+      0 -> List.rev risultato               (*caso base, tutti i colori analizzati. Ritorna la lista invertita [con il giusto ordine]*)
+    | x -> 
+      aux                                   (*caso ricorsivo, somma al risultato il colore precedente all'attuale per trovare un nuovo colore*)
+        (risultato@[(x-1)])                 (* aggiunge il numero alla lista*)
+        (x-1)                               (* continua con il nuovo numero*)
+  in aux [] maxColori     (*avvia la funzione con risultato=[] e colore=maxColori*)
+;;
+
+
+
+
+
+
+
+(*Lista con tutti i colori disponibili*)
+(*  Verrà poi utilizzata per cercare di trovare un possibile colore per i nodi.
+    Verrà successivamente inizializzata con tutti i colori disponibili
+*)
+let lista_colori = ref [0;];;
+
+
+
+(*Funzione per trovare un possibile colore per un nodo dato*)
+(*  La funzione controlla tutti i colori vicini del nodo e ricorsivamente
+    va a controllare se un colore è sato già assegnato.
+
+    - Se il colore in esame è stato assegnato (un nodo adiacente ha quel colore) passa al successivo
+    - Se un colore non è stato assegnato viene ritornato
+
+    Se tutti i colori disponibili sono stati assegnati, solleva un'eccezione.
+
+  input:
+    succ:     Funzione successori (il grafo)
+    nodo:     Nodo da colorare
+    colorati: Lista con tutti i nodi colorati
+*)
+let scegli_colore (Grafo succ) nodo colorati = 
+  let vicini = succ nodo in                                         (*tutti i vicini del nodo*)
+    let colori_vicini = tutti_colori_vicini vicini colorati in      (*tutti i colori vicini del nodo*)
+      let rec cerca_colore_nonusato = function (* lista colori da provare*)
+        []        -> raise InsufficentColorNumber;    (*caso base, non ci sono colori disponibili*)
+        |x::coda  ->                                  (*caso ricorsivo, analizza il colore*)
+          if List.mem x colori_vicini                 (* il colore è tra i colori vicini*)
+            then
+              cerca_colore_nonusato coda              (*  continua la ricorsione ignorandolo*)
+        else                                          (* il colore non è tra i vicini*)
+          x                                           (*  trovato! Lo ritorna*)
+        in cerca_colore_nonusato !lista_colori      (*avvia la ricorsione con la lista di colori*)
+;;
+
+
+
+let colora (Problema ((Grafo succ), partenza, maxColori)) =
+  lista_colori := calcola_lista_colori maxColori;          (*valore per trovare il colore mancante*)
+  let rec esplora visitati colorati = 
+    function (*frontiera*)
+        []            -> colorati  (*fine delle ricorsione, se la frontiera è vuota la colorazione è finita*)
+      | nodo::coda    ->           (*caso ricorsivo, continua a colorare*)
+        if List.mem nodo visitati              (*se il nodo è già stato visitato*)
+          then esplora visitati colorati coda  (* ignora il nodo ed estrae il successivo dalla frontiera*)
+        
+        else 
+          (*continua con la ricorsione espandendo i nodi vicini al nodo*)
+          esplora 
+                (visitati@[nodo])                                                              (*aggiunge il nodo attuale ai visitati*)
+                (colorati@[(nodo, (scegli_colore (Grafo succ) nodo colorati))]) (*colora il nodo [aggiunge la coppia (nodo,colore) a colorati]*)
+                (coda@(succ nodo))                                                             (*espande i vicini del nodo attuale e li aggiunge alla frontiera*)
+      
+  in esplora [] [] [partenza]   (*avvia la ricerca e la colorazione, visitati=[], colorati=[], frontiera=[partenza]*)
+;;
+
+
+
+
+
+
+
+(*Funzione per salvare un grafo colorato su file*)
+(* Dato un grafo e i suoi nodi colorati, salva su file il grafo nella forma:
+    nodo,vicini,colore nodo
+  
+    e.g.: il nodo 1 confina con i nodi 2, 0, 5, 6 ed ha il colore 0
+      1, 2 0 5 6,0
+
+  input:
+    succ:     Funzione successori
+    colorati: Lista di coppie nodo - colore
+*)
+let grafodati_file = "grafo.data";; (*Nome del file su cui vengono salvati i dati del grafo*)
+let salva_grafo_colorato (Grafo succ) colorati = 
+  let oc = open_out grafodati_file in           (*Apertura del file in scrittura*)
+    let rec salva_lista =                       (*Funzione ausiliaria per salvare su file una lista data*)
+      function (* lista *)
+         [x]      -> Printf.fprintf oc "%d" x   (* caso base, se la lista ha un solo elemento lo stampa (senza " ")*)
+        | x::coda ->                            (* caso ricorsivo, la lista ha più elementi*)            
+          Printf.fprintf oc "%d " x;            (*  stampa l'elemento*)
+          salva_lista coda                      (*  continua la ricorsione*)
+        | _ -> ()
+    in let rec salva =                                (*Funzione ausiliaria per salvare nodo - vicini - colore su file*)
+      function (* lista nodi_colorati *)
+         [] -> Printf.fprintf oc "\n"; close_out oc   (* caso base, la lista è finita. Stampo un \n e chiudo il file*)
+        |(nodo, colore)::coda ->                      (* caso ricorsivo, stampo nodo,lista vicini,colore nodo*)
+          Printf.fprintf oc "%d," nodo; salva_lista (succ nodo); Printf.fprintf oc ","; Printf.fprintf oc "%d\n" colore; 
+          salva coda
+
+    in salva colorati (*avvia la funzione ausiliaria per salvare il grafo su file*)
+;;
+
+
+
+
+
+
+
+(*VECCHIE FUNZIONI*)
+(* Per ora le tengo solo per sicurezza, poi andranno eliminate !!*)
+(* TODO: rimuoverle quando inutili*)
+
+(*
 
 
 (*Valore di rifermineto per trovare il nodo mancante*)
 (* il valore qui è solo un placeholder, viene cambianto appena avviata la funzione colora!!*)
 let refValue = ref 10;; 
-
-
-
 
 
 
@@ -161,8 +292,6 @@ let trova_mancante colori_vicini maxColori =
 
 
 
-
-
 (*Trova il valore di riferimento*)
 (* Serve per calcolare il colore mancate: è la somma di tutti i valori dei colori.
     e.g.: se maxColori = 4 allora ref_value = 0 + 1 + 2 + 3 = 6
@@ -177,27 +306,8 @@ let calcola_refValue maxColori =
       0 -> risultato                     (*caso base, è alla fine perchè l'ultimo colore che analizza è 0. Ritorna il risultato*)
     | x -> aux (risultato+(x-1)) (x-1)   (*caso ricorsivo, somma al risultato il colore precedente all'attuale*)
   in aux 0 maxColori                   (*avvia la ricorsione con risultato=0 e colore=maxColori*)
-;;               
+;; 
 
-(*Calcola la lista con tutti i colori disponibili*)
-(*  Funzione che dato il massimo numero di colori restituisce
-    una lista con tutti i colori.
-
-    e.g.: 
-      maxColori = 3 risultato = [0; 1; 2]
-
-  input:
-    maxColori: numero di colori da utilizzare
-*)
-let calcola_lista_colori maxColori = 
-  let rec aux risultato = function (* colore *)
-      0 -> List.rev risultato               (*caso base, tutti i colori analizzati. Ritorna la lista invertita [con il giusto ordine]*)
-    | x -> 
-      aux                                   (*caso ricorsivo, somma al risultato il colore precedente all'attuale per trovare un nuovo colore*)
-        (risultato@[(x-1)])                 (* aggiunge il numero alla lista*)
-        (x-1)                               (* continua con il nuovo numero*)
-  in aux [] maxColori     (*avvia la funzione con risultato=[] e colore=maxColori*)
-;;
 
 
 
@@ -231,46 +341,56 @@ let scegli_colore_old (Grafo succ) nodo colorati maxColori =
 
 
 
-(*Lista con tutti i colori disponibili*)
-(*  Verrà poi utilizzata per cercare di trovare un possibile colore per i nodi.
-    Verrà successivamente inizializzata con tutti i colori disponibili
-*)
-let lista_colori = ref [0;1;2];;
 
-(*Funzione per trovare un possibile colore per un nodo dato*)
-(*  La funzione controlla tutti i colori vicini del nodo e ricorsivamente
-    va a controllare se un colore è sato già assegnato.
-
-    - Se il colore in esame è stato assegnato (un nodo adiacente ha quel colore) passa al successivo
-    - Se un colore non è stato assegnato viene ritornato
-
-    Se tutti i colori disponibili sono stati assegnati, solleva un'eccezione.
-
-  input:
-    succ:     Funzione successori (il grafo)
-    nodo:     Nodo da colorare
-    colorati: Lista con tutti i nodi colorati
-*)
-let scegli_colore (Grafo succ) nodo colorati = 
-  let vicini = succ nodo in                                         (*tutti i vicini del nodo*)
-    let colori_vicini = tutti_colori_vicini vicini colorati in      (*tutti i colori vicini del nodo*)
-      let rec cerca_colore_nonusato = function (* lista colori da provare*)
-        []        -> raise InsufficentColorNumber;    (*caso base, non ci sono colori disponibili*)
-        |x::coda  ->                                  (*caso ricorsivo, analizza il colore*)
-          if List.mem x colori_vicini                 (* il colore è tra i colori vicini*)
-            then
-              cerca_colore_nonusato coda              (*  continua la ricorsione ignorandolo*)
-        else                                          (* il colore non è tra i vicini*)
-          x                                           (*  trovato! Lo ritorna*)
-        in cerca_colore_nonusato !lista_colori      (*avvia la ricorsione con la lista di colori*)
-;;
-
-
-
-
-
+(* 
+let p (Grafo succ) (nodo, colore) colorati = 
+  let vicini = succ nodo in
+  let colori_vicini = tutti_colori_vicini vicini colorati in
+    let rec aux = function (*colori vicini*)
+      [] -> true
+      | x::coda -> 
+        if x = colore
+          then false
+      else
+        aux coda
+      in aux colori_vicini
+      ;;
 
 let colora (Problema ((Grafo succ), partenza, maxColori)) =
+  lista_colori := calcola_lista_colori maxColori;       (*valore per trovare il colore mancante*)
+ (* from_node cerca un cammino a partire dal nodo a *)
+ let rec from_node visited colorati a =
+  print_int a;
+  let c = scegli_colore (Grafo succ) a colorati in
+  if List.mem (a,c) colorati (*?? non ha molto senso*)
+     then raise InsufficentColorNumber
+else if List.length colorati = 5 then colorati
+(*   else if p (Grafo succ) (a,c) colorati then (colorati@[(a,c)])(* [(a,c)] *)  (* il cammino e’ trovato *) *)
+  else (a,c)::from_list (colorati@[(a,c)]) (visited@[a]) (succ a) (*dovrei aggiungere elementi a colorati ??*)
+  (* cerca un cammino da uno dei successori di a *)
+
+(* from_list cerca un cammino che parta da uno dei nodi della lista suo argomento *)
+and from_list colorati visited = function (*frontiera*)
+  [] -> raise InsufficentColorNumber
+  | a::rest -> try from_node visited colorati a
+      with InsufficentColorNumber -> from_list colorati visited rest
+
+  in from_node [] [] partenza;; 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+let colora_test (Problema ((Grafo succ), partenza, maxColori)) =
   lista_colori := calcola_lista_colori maxColori;       (*valore per trovare il colore mancante*)
   let rec esplora visitati colorati = 
     function (*frontiera*)
@@ -287,10 +407,7 @@ let colora (Problema ((Grafo succ), partenza, maxColori)) =
                 (coda@(succ nodo))                                                             (*espande i vicini del nodo attuale e li aggiunge alla frontiera*)
       
   in esplora [] [] [partenza]   (*avvia la ricerca e la colorazione, visitati=[], colorati=[], frontiera=[partenza]*)
-;;
-
-
-
+;; *)
 
 
 
@@ -325,36 +442,4 @@ let colora_old (Problema ((Grafo succ), partenza, maxColori)) =
 
 
 
-
-
-
-(*Funzione per salvare un grafo colorato su file*)
-(* Dato un grafo e i suoi nodi colorati, salva su file il grafo nella forma:
-    nodo,vicini,colore nodo
-  
-    e.g.: il nodo 1 confina con i nodi 2, 0, 5, 6 ed ha il colore 0
-      1, 2 0 5 6,0
-
-  input:
-    succ:     Funzione successori
-    colorati: Lista di coppie nodo - colore
 *)
-let grafodati_file = "grafo.data";; (*Nome del file su cui vengono salvati i dati del grafo*)
-let salva_grafo_colorato (Grafo succ) colorati = 
-  let oc = open_out grafodati_file in           (*Apertura del file in scrittura*)
-    let rec salva_lista =                       (*Funzione ausiliaria per salvare su file una lista data*)
-      function (* lista *)
-         [x]      -> Printf.fprintf oc "%d" x   (* caso base, se la lista ha un solo elemento lo stampa (senza " ")*)
-        | x::coda ->                            (* caso ricorsivo, la lista ha più elementi*)            
-          Printf.fprintf oc "%d " x;            (*  stampa l'elemento*)
-          salva_lista coda                      (*  continua la ricorsione*)
-        | _ -> ()
-    in let rec salva =                                (*Funzione ausiliaria per salvare nodo - vicini - colore su file*)
-      function (* lista nodi_colorati *)
-         [] -> Printf.fprintf oc "\n"; close_out oc   (* caso base, la lista è finita. Stampo un \n e chiudo il file*)
-        |(nodo, colore)::coda ->                      (* caso ricorsivo, stampo nodo,lista vicini,colore nodo*)
-          Printf.fprintf oc "%d," nodo; salva_lista (succ nodo); Printf.fprintf oc ","; Printf.fprintf oc "%d\n" colore; 
-          salva coda
-
-    in salva colorati (*avvia la funzione ausiliaria per salvare il grafo su file*)
-;;
