@@ -95,6 +95,10 @@ let grafo_3 =
 let grafo_4 = 
   let x = function
       0 -> [1; 2; 3; 4]
+    | 1 -> [0]
+    | 2 -> [0]
+    | 3 -> [0]
+    | 4 -> [0]
     | _ -> [] in
     
     let start = 0 in            (* Partenza *)
@@ -119,6 +123,7 @@ let grafo_5 =
     |  6 -> [0;5]
     |  7 -> [0;8]
     |  8 -> [1;7]
+    | 10 -> [5]
     | _  -> [] in
     
     let start = 0 in            (* Partenza *)
@@ -126,6 +131,41 @@ let grafo_5 =
     let succ = Grafo x in  (* Successori *)
 
     (Problema (succ, start, maxColori))
+;;
+
+
+
+
+
+
+
+let grafo_6 = 
+  let x = function
+       0 -> [1]
+    |  1 -> [0; 2; 3]
+    |  2 -> [1; 4; 5]
+    |  3 -> [1; 12]
+    |  4 -> [2; 6]
+    |  5 -> [2; 11]
+    |  6 -> [4; 7; 8]
+    |  7 -> [6; 10]
+    |  8 -> [6; 9; 10]
+    |  9 -> [8; 11]
+    | 10 -> [7; 12; 13]
+    | 11 -> [5; 9; 15]
+    | 12 -> [3; 10; 13]
+    | 13 -> [10; 12; 14; 16]
+    | 14 -> [13]
+    | 15 -> [11]
+    | 16 -> [13; 17]
+    | 17 -> [16]
+    | _  -> [] in
+
+  let start = 0 in            (* Partenza *)
+  let maxColori = 3 in        (* Massimo numero di colori*)
+  let succ = Grafo x in  (* Successori *)
+
+  (Problema (succ, start, maxColori))
 ;;
 
 
@@ -146,7 +186,8 @@ let grafi = [
   (grafo_2_err,   "Grafo 2 con un numero di colori insufficiente per essere colorato"); 
   (grafo_3,       "Grafo 3"); 
   (grafo_4,       "Grafo 4");
-  (grafo_5,       "Grafo 5")
+  (grafo_5,       "Grafo 5");
+  (grafo_6,       "Grafo molto grosso")
 ];;
 
 
