@@ -196,9 +196,87 @@ let scegli_colore (Grafo succ) nodo colorati =
         in cerca_colore_nonusato !lista_colori      (*avvia la ricorsione con la lista di colori*)
 ;;
 
+(* dovrebbe incrementare di 1 il colore del nodo *)
+let incrementa_colore_nodi risultato nodi colore = 
+  List.map (fun(x, y) -> if ((List.mem x nodi) && (colore=(get_colore x risultato))) then (x, y+1) else (x, y)) risultato
+;;
 
+
+(* incrementa di 1 i colori vicini al nodo se hanno lo stesso colore del nodo *)
+(* let aggiorna_colori_vicini risultato nodo vicini = 
+  let rec aux risultato nodo = function (* vicino del nodo *)
+      [] -> risultato
+    | vicino::resto -> 
+      if (get_colore nodo risultato) = (get_colore vicino risultato)
+        then 
+         aux (incrementa_colore_nodo risultato vicino) nodo resto
+      else
+        aux risultato nodo resto
+  in aux risultato nodo vicini 
+ *)
+
+let inizializza_risultato (Grafo succ) partenza =
+  let rec bfs visitati risultato = function (* frontiera *)
+    [] -> risultato
+    | nodo::coda ->
+      if List.mem nodo visitati
+        then 
+          bfs visitati risultato coda
+      else
+        bfs 
+          (visitati@[nodo])
+          (risultato@[(nodo, 0)])
+          (coda@(succ nodo)) 
+
+      in bfs [] [] [partenza]
+    ;;
+
+let controlla_risultato risultato maxColori = 
+  let rec aux = function (* risultato *)
+    [] -> true
+    |(nodo,colore)::coda ->
+      if colore >= maxColori
+        then 
+          false
+      else
+        aux coda
+  in aux risultato
+;; 
 
 let colora (Problema ((Grafo succ), partenza, maxColori)) =
+  let risultato = inizializza_risultato (Grafo succ) partenza in
+  let rec esplora visitati colorati = 
+    function (*frontiera*)
+        []            ->  (*fine delle ricorsione, se la frontiera è vuota la colorazione è finita*)
+          if controlla_risultato colorati maxColori 
+            then colorati
+          else 
+            raise InsufficentColorNumber
+      | nodo::coda    ->           (*caso ricorsivo, continua a colorare*)
+        if List.mem nodo visitati              (*se il nodo è già stato visitato*)
+          then esplora visitati colorati coda  (* ignora il nodo ed estrae il successivo dalla frontiera*)
+        
+        else 
+          (*continua con la ricorsione espandendo i nodi vicini al nodo*)
+          esplora 
+                (visitati@[nodo])                                                              (*aggiunge il nodo attuale ai visitati*)
+                (incrementa_colore_nodi colorati (succ nodo) (get_colore nodo colorati)) (*colora il nodo [aggiunge la coppia (nodo,colore) a colorati]*)
+                (coda@(succ nodo))                                                             (*espande i vicini del nodo attuale e li aggiunge alla frontiera*)
+      
+  in esplora [] risultato [partenza]
+;;
+
+
+(* 
+incrementa_colore_nodi risultato [1;4] (get_colore 3 risultato);;
+let risultato = [(0,0);(1,1);(2,0);(3,0);(4,1);(5,0);(6,0)];; *)
+
+
+
+
+
+
+(* let colora (Problema ((Grafo succ), partenza, maxColori)) =
   lista_colori := calcola_lista_colori maxColori;          (*valore per trovare il colore mancante*)
   let rec esplora visitati colorati = 
     function (*frontiera*)
@@ -215,7 +293,7 @@ let colora (Problema ((Grafo succ), partenza, maxColori)) =
                 (coda@(succ nodo))                                                             (*espande i vicini del nodo attuale e li aggiunge alla frontiera*)
       
   in esplora [] [] [partenza]   (*avvia la ricerca e la colorazione, visitati=[], colorati=[], frontiera=[partenza]*)
-;;
+;; *)
 
 
 
