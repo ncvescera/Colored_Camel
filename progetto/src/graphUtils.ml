@@ -3,11 +3,6 @@ type problema = Problema of grafo * int * int;;
 exception InsufficentColorNumber;;
 
 
-
-
-
-
-
 (*Trova il colore di un nodo*)
 (* Va a cercare il nodo tra la lista dei nodi colorati, se esiste ritorna il suo colore
     altrimenti -1
@@ -148,6 +143,28 @@ let calcola_lista_colori maxColori =
     Verrà successivamente inizializzata con tutti i colori disponibili
 *)
 let lista_colori = ref [0;];;
+
+
+
+(* Ritorna True se il grafo è completamente colorato e colorato bene, sennò False*)
+(* let obiettivo (Grafo succ) partenza colorati = 
+  let bfs visitati colore_padre = function (*frontiera*)
+    [] -> true
+    | nodo::coda ->
+      let colore = get_colore nodo colorati in
+
+
+
+    in bfs [partenza] (get_colore nodo colorati) (succ partenza) *)
+  (*let aux = function (*lista nodi colorati*)
+      [] -> true
+    | (nodo, colore)::coda ->
+      let vicini = succ nodo in 
+        let colori_vicini = tutti_colori_vicini nodo colorati in
+          if List.mem colore colori_vicini then false
+          else 
+            aux coda*)
+
 
 
 
