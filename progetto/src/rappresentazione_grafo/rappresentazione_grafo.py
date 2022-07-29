@@ -1,5 +1,7 @@
 import random
 from pyvis.network import Network
+import networkx as nx
+import matplotlib.pyplot as plt
 from sys import argv
 
 
@@ -79,16 +81,26 @@ def rappresenta_grafo (nodi, collegamenti, colori):
         Rappresenta il grafo con pyvis.
     """
 
+    G = nx.Graph()
+
+    G.add_nodes_from(nodi)
+    G.add_edges_from(collegamenti)
+
+    nx.draw(G, node_color=colori, with_labels=True, font_weight='bold')
+    plt.savefig("risultato.png")
+    
+    """
     net = Network(width='100%', height='600px', directed=False)
 
-    net.add_nodes(nodi, color=colori)
+    net.add_nodes(nodi, label=[f"{x}" for x in nodi], color=colori)
     net.add_edges(collegamenti)
 
     net.toggle_physics(True)
     net.inherit_edge_colors(False)
-
-    net.show('rappresentazione_grafo.html')
-
+    net.write_html('rappresentazione_grafo.html')
+    net.
+    #net.show('rappresentazione_grafo.html')
+    """
 
 if __name__ == "__main__":
     main(argv[1])
