@@ -5,12 +5,18 @@ import matplotlib.pyplot as plt
 from sys import argv
 
 
-def main(fname):
+def main(args):
     """
         Questo script rappresenta un grafo con pyvis.
         Prende in input il file (che rappresenta un grafo) generato dal programma OCaml e rappresenta il relativo grafo con i colori.
     """
+    
+    # controlla che il nome del file sia stato passato
+    if len(args) <= 0: return
 
+    fname = args[0]
+    in_jupyter = True if len(args) >= 2 else False
+    
     collegamenti = []
     nodi = []
     colori = []
@@ -33,7 +39,7 @@ def main(fname):
     nodi = trova_nodi(collegamenti)                             # controlla che abbia trovato tutti i nodi dalla sola analisi del file
     colori = aggiusta_colori(colori)                            # converte i colori da int a stringa hex per pyvis
 
-    rappresenta_grafo(nodi, collegamenti, colori)               # rappresenta il grafo con pyvis
+    rappresenta_grafo(nodi, collegamenti, colori, in_jupyter)               # rappresenta il grafo con pyvis
 
 
 def trova_nodi (collegamenti):
@@ -76,32 +82,31 @@ def aggiusta_colori (colori):
     return risultato
 
 
-def rappresenta_grafo (nodi, collegamenti, colori):
+def rappresenta_grafo (nodi, collegamenti, colori, in_jupyter):
     """
         Rappresenta il grafo con pyvis.
     """
+    if in_jupyter:
+        G = nx.Graph()
 
-    G = nx.Graph()
+        G.add_nodes_from(nodi)
+        G.add_edges_from(collegamenti)
 
-    G.add_nodes_from(nodi)
-    G.add_edges_from(collegamenti)
+        nx.draw(G, node_color=colori, with_labels=True, font_weight='bold')
+        plt.savefig("risultato.png")
 
-    nx.draw(G, node_color=colori, with_labels=True, font_weight='bold')
-    plt.savefig("risultato.png")
+    else:
+        net = Network(width='100%', height='600px', directed=False)
+
+        net.add_nodes(nodi, label=[f"{x}" for x in nodi], color=colori)
+        net.add_edges(collegamenti)
+
+        net.toggle_physics(True)
+        net.inherit_edge_colors(False)
+        net.write_html('rappresentazione_grafo.html')
+        # net.show('rappresentazione_grafo.html')
     
-    """
-    net = Network(width='100%', height='600px', directed=False)
-
-    net.add_nodes(nodi, label=[f"{x}" for x in nodi], color=colori)
-    net.add_edges(collegamenti)
-
-    net.toggle_physics(True)
-    net.inherit_edge_colors(False)
-    net.write_html('rappresentazione_grafo.html')
-    net.
-    #net.show('rappresentazione_grafo.html')
-    """
 
 if __name__ == "__main__":
-    main(argv[1])
+    main(argv[1:])
  
