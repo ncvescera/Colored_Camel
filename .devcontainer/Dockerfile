@@ -1,6 +1,7 @@
 FROM ocaml/opam:latest
 
 RUN sudo apt-get update && sudo apt upgrade -y
+RUN sudo apt-get update --fix-missing
 RUN sudo apt-get install -y zlib1g-dev libffi-dev libcairo2-dev libgmp-dev libzmq5-dev pkg-config
 RUN sudo apt install -y make python3 python3-pip
 RUN pip3 install jupyter
