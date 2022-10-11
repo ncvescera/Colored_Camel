@@ -1,7 +1,7 @@
 type grafo = Grafo of (int -> int list);;
 type problema = Problema of grafo * int * int;;
 
-exception NumeroColoriInsifficiente;;
+exception NumeroColoriInsufficiente;;
 
 
 
@@ -63,7 +63,7 @@ let incrementa_colore_nodi risultato nodi colore maxColori =
                   let nuovo_colore = y + 1 in
                   if ((nuovo_colore) >= maxColori)        (*coltrolla che il numero massimo di colori*)
                       then                                (*non venga superato                       *)
-                          raise NumeroColoriInsifficiente
+                          raise NumeroColoriInsufficiente
                   else 
                       (x, nuovo_colore)
           else 
