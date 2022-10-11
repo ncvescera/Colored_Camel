@@ -1,4 +1,4 @@
-<img src="relazione/img/logo.png" width="100%" />
+<img src="relazione/Colored Camel_files/logo.png" width="100%" />
 
 ## Installazione
 
