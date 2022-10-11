@@ -48,5 +48,5 @@ $(bindir):
 
 clear:
 	rm -f $(buildir)/*.cmo
-	rm -f $(bindir)/*
+	rm -rf $(bindir)/*
 	rm -f $(srcdir)/*.cmi

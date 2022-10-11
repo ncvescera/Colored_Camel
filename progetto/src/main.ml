@@ -22,7 +22,8 @@ let scelta () =
 (*Avvia lo script in python per la rappresentazione del grafo*)
 (* Ignora il fatto che Sys.command ritorna un int*)
 let avvia_python () = 
-    let aux _ = () in aux (Sys.command "python rappresentazione_grafo.py grafo.data")
+    let forza_unit _ = () in
+        forza_unit(Sys.command "python3 rappresentazione_grafo.py grafo.data")
 ;;
 
 
@@ -48,7 +49,7 @@ let main () =
                         
                         print_string "Coloro ...\n\n";
                         
-                        let colorati = colora (Problema (g, partenza, maxColori)) in       (*colora il grfo*)
+                        let colorati = risolvi (Problema (g, partenza, maxColori)) in       (*colora il grfo*)
                             stampa_nodi_colorati colorati;                              (* stampa il grafo colorato*)
                             salva_grafo_colorato g colorati;                            (* salva il grafo colorato per python*)
                             avvia_python ()                                             (* avvia python per mostrare a schermo il grafo*)
@@ -56,7 +57,7 @@ let main () =
                                 in                                      (*con un grafo scelto, lo colora*)
                                     try                                 (*se il numero di colori scelto è insufficiente, stampa un errore*)
                                         avvia_colorazione dati  
-                                    with InsufficentColorNumber -> 
+                                    with NumeroColoriInsifficiente -> 
                                         stampa_errore ()
 
 ;;
