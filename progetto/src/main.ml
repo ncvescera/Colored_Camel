@@ -57,7 +57,7 @@ let main () =
                                 in                                      (*con un grafo scelto, lo colora*)
                                     try                                 (*se il numero di colori scelto è insufficiente, stampa un errore*)
                                         avvia_colorazione dati  
-                                    with NumeroColoriInsifficiente -> 
+                                    with NumeroColoriInsufficiente -> 
                                         stampa_errore ()
 
 ;;
